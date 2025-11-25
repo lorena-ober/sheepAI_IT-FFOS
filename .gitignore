@@ -1,0 +1,16 @@
+# general
+.DS_Store
+*.log
+
+# node / react
+node_modules/
+dist/
+build/
+.vite/
+
+# env (API keys)
+.env
+.env.local
+.env.development
+.env.production
+.env.test
