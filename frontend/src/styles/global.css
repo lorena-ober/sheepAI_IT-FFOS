@@ -1007,3 +1007,142 @@ html {
   opacity: 0.25;
 }
 
+/* Layout oko Feeda, sidebar + heatmap */
+.feed-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.feed-main {
+  flex: 1 1 auto;
+}
+
+/* Grid kartica – prilagodi ako već postoji */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Sidebar za Geo activity */
+.feed-sidebar {
+  width: 260px;
+  padding: 1.25rem 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 1.25rem;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  font-size: 0.85rem;
+}
+
+.feed-sidebar h3 {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.geo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.geo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.geo-count {
+  font-weight: 600;
+}
+
+.geo-hint {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Heatmap blok */
+.feed-heatmap-wrapper {
+  margin-top: 2rem;
+}
+
+.heatmap-section {
+  margin-top: 1.5rem;
+  padding: 1.5rem 1rem 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 1.25rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+}
+
+.heatmap-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.heatmap-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #111827;
+}
+
+.heatmap-subtitle {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.heatmap-map-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.heatmap-map {
+  width: 100%;
+  min-height: 260px;
+}
+
+.heatmap-legend {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #374151;
+}
+
+.heatmap-legend-gradient {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #d1fae5 0%,
+    #fde68a 40%,
+    #f97316 75%,
+    #b91c1c 100%
+  );
+}
+
+.heatmap-legend-label {
+  white-space: nowrap;
+}
+
+/* Mobile fallback – sidebar ispod grida */
+@media (max-width: 900px) {
+  .feed-layout {
+    flex-direction: column;
+  }
+
+  .feed-sidebar {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+}
+
