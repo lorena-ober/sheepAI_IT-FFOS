@@ -1,0 +1,88 @@
+/* === FEED GRID === */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+/* === ARTICLE CARD === */
+.article-card {
+  background: #fff;
+  padding: 1.2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+.article-card:hover {
+  transform: translateY(-4px);
+}
+
+.article-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  max-height: 2.6rem;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+/* === BULLETS === */
+.article-bullets li {
+  cursor: pointer;
+  padding: 4px 0;
+}
+.article-bullets li:hover {
+  color: #0b6bff;
+}
+
+/* === BADGES === */
+.badge {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-right: 6px;
+}
+
+/* Risk colors */
+.badge-risk-low {
+  background: #d4f7d4;
+  color: #0a7c0a;
+}
+.badge-risk-medium {
+  background: #fff0b3;
+  color: #9c7a00;
+}
+.badge-risk-high {
+  background: #ffd2d2;
+  color: #b60000;
+}
+
+/* === OVERLAY === */
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.overlay-card {
+  background: #fff;
+  padding: 2rem;
+  max-width: 700px;
+  width: 90%;
+  border-radius: 14px;
+  position: relative;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
