@@ -1,4 +1,3 @@
-// frontend/src/components/Feed.jsx
 import { useEffect, useMemo, useState } from "react";
 import "../styles/global.css";
 import { fetchNews } from "../api.js";
@@ -25,7 +24,7 @@ function applyContentTypeFilter(articles, contentType) {
   const keywordGroups = {
     malware: ["malware", "rat", "trojan", "backdoor"],
     vulnerabilities: ["vulnerability", "vulnerabilities", "cve", "exploit"],
-    policy: ["policy", "compliance", "regulation"]
+    policy: ["policy", "compliance", "regulation"],
   };
 
   const keywords = keywordGroups[contentType];
@@ -81,7 +80,7 @@ export default function Feed({ preferences }) {
         const data = await fetchNews(preferences);
 
         if (!cancelled) {
-          // fetchNews vraća { articles: [...] }
+          // fetchNews returns { articles: [...] }
           setArticles(data.articles || data || []);
         }
       } catch (err) {
@@ -118,16 +117,20 @@ export default function Feed({ preferences }) {
   if (loading) return <div className="feed-status">Loading news…</div>;
   if (error) return <div className="feed-status error">{error}</div>;
   if (!filteredAndSorted.length) {
-    return <div className="feed-status">Nema članaka za zadane filtere.</div>;
+    return (
+      <div className="feed-status">
+        No articles for the selected filters.
+      </div>
+    );
   }
 
   return (
     <div className="feed-layout">
       <section className="feed-main">
-        {/* Barometar rizika na vrhu, radi na temelju već filtriranih članaka */}
+        {/* Risk barometer at the top, based on already filtered articles */}
         <RiskBarometer articles={filteredAndSorted} />
 
-        {/* Grid kartica */}
+        {/* Card grid */}
         <div className="feed-grid">
           {filteredAndSorted.map((article) => (
             <ArticleCard
@@ -138,7 +141,7 @@ export default function Feed({ preferences }) {
           ))}
         </div>
 
-        {/* Heatmap – prikaz globalnog rizika po državama */}
+        {/* Heatmap – global risk by country */}
         {preferences.heatmap && (
           <div className="feed-heatmap-wrapper">
             <Heatmap articles={filteredAndSorted} />
@@ -146,7 +149,7 @@ export default function Feed({ preferences }) {
         )}
       </section>
 
-      {/* Sidebar s geo countovima */}
+      {/* Sidebar with geo counts */}
       {preferences.heatmap && (
         <aside className="feed-sidebar">
           <h3>Geo activity</h3>
@@ -159,8 +162,8 @@ export default function Feed({ preferences }) {
             ))}
           </ul>
           <p className="geo-hint">
-            * Approximate geo extracted by AI. Used for rough “heatmap” of where
-            incidents happen.
+            * Approximate geo extracted by AI. Used as a rough “heatmap” of
+            where incidents happen.
           </p>
         </aside>
       )}
@@ -171,6 +174,5 @@ export default function Feed({ preferences }) {
           onClose={() => setActiveArticle(null)}
         />
       )}
-    </div>
-  );
+ </div>);
 }
