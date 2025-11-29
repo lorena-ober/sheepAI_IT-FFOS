@@ -1,27 +1,33 @@
 // frontend/src/components/Feed.jsx
 import { useEffect, useState } from "react";
-import "../App.css"; // ili "./../styles/global.css" ako koristiš global.css
-import { fetchNews } from "../api";
+import "../styles/global.css";
+import { fetchNews } from "../api.js";
+import ArticleCard from "./ArticleCard.jsx";
+import ArticleOverlay from "./ArticleOverlay.jsx";
 
-function Feed({ preferences }) {
+export default function Feed({ preferences }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [activeOverlay, setActiveOverlay] = useState(null);
+
   useEffect(() => {
     let cancelled = false;
 
-    async function load() {
-      setLoading(true);
-      setError(null);
+    async function loadNews() {
       try {
-        const data = await fetchNews(preferences);
+        setLoading(true);
+        setError(null);
+
+        const res = await fetchNews(preferences);
         if (!cancelled) {
-          setArticles(data.articles || []);
+          setArticles(res?.articles || res || []);
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err.message || "Failed to load news");
+          console.error("Error fetching news:", err);
+          setError("Failed to load news.");
         }
       } finally {
         if (!cancelled) {
@@ -30,37 +36,39 @@ function Feed({ preferences }) {
       }
     }
 
-    load();
+    loadNews();
 
     return () => {
       cancelled = true;
     };
   }, [preferences]);
 
-  if (loading) {
-    return <p>Loading feed...</p>;
-  }
-
-  if (error) {
-    return <p>Greška: {error}</p>;
-  }
-
-  if (!articles.length) {
-    return <p>Nema članaka za zadane filtere.</p>;
-  }
+  if (loading) return <p>Loading news...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!articles.length) return <p>Nema članaka za zadane filtere.</p>;
 
   return (
-    <section>
-      <h2>Feed</h2>
-      <ul>
+    <div className="feed">
+      <div className="feed-grid">
         {articles.map((article) => (
-          <li key={article.id || article.link}>
-            {article.title}
-          </li>
+          <ArticleCard
+            key={article.id || article.link}
+            article={article}
+            onBulletHover={(idx) =>
+              setActiveOverlay({ article, bulletIndex: idx })
+            }
+            onBulletLeave={() => setActiveOverlay(null)}
+          />
         ))}
-      </ul>
-    </section>
+      </div>
+
+      {activeOverlay && (
+        <ArticleOverlay
+          article={activeOverlay.article}
+          bulletIndex={activeOverlay.bulletIndex}
+          onClose={() => setActiveOverlay(null)}
+        />
+      )}
+    </div>
   );
 }
-
-export default Feed;
