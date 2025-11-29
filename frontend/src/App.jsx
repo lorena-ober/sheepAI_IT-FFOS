@@ -1,11 +1,34 @@
-import { useState } from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+import "./styles/global.css";
 import FilterForm from "./components/FilterForm.jsx";
 import Feed from "./components/Feed.jsx";
 
+function LadybugSplash({ onFinish }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFinish();
+    }, 2600); // trajanje animacije u ms, sinkronizirano s CSS-om
+    return () => clearTimeout(timer);
+  }, [onFinish]);
+
+  return (
+    <div className="splash-root">
+      <div className="splash-bg-glow" />
+      <div className="ladybug-track">
+        <div className="ladybug" />
+      </div>
+      <p className="splash-text">Loading your secure feed...</p>
+    </div>
+  );
+}
 
 function App() {
   const [preferences, setPreferences] = useState(null);
+  const [splashDone, setSplashDone] = useState(false);
+
+  if (!splashDone) {
+    return <LadybugSplash onFinish={() => setSplashDone(true)} />;
+  }
 
   const handleResetPreferences = () => {
     setPreferences(null);
