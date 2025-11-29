@@ -8,7 +8,9 @@ const client = new OpenAI({
 const MODEL = process.env.OPENAI_MODEL || "gpt-4.1-mini";
 
 if (!process.env.OPENAI_API_KEY) {
-  console.warn("⚠ OPENAI_API_KEY nije postavljen u .env – AI analiza će biti dummy.");
+  console.warn(
+    "⚠ OPENAI_API_KEY nije postavljen u .env – AI analiza će biti fallback dummy."
+  );
 }
 
 /**
@@ -21,7 +23,7 @@ if (!process.env.OPENAI_API_KEY) {
  * }
  */
 async function analyzeArticle(article) {
-  // fallback ako nema API keya – da frontend ne pukne
+  // Fallback ako nema API keya – da backend ne puca
   if (!process.env.OPENAI_API_KEY) {
     return {
       bulletPoints: ["AI analysis disabled (no API key configured)."],
@@ -38,79 +40,66 @@ async function analyzeArticle(article) {
   const response = await client.responses.create({
     model: MODEL,
     input: prompt,
-    response_format: {
-      type: "json_schema",
-      json_schema: {
-        name: "news_analysis",
-        schema: {
-          type: "object",
-          properties: {
-            bulletPoints: {
-              type: "array",
-              items: { type: "string" },
-            },
-            extendedSummary: { type: "string" },
-            riskScore: {
-              type: "number",
-              minimum: 0,
-              maximum: 100,
-            },
-            integrityLabel: {
-              type: "string",
-              enum: ["reliable", "suspicious", "needs-checking"],
-            },
-            integrityConfidence: {
-              type: "number",
-              minimum: 0,
-              maximum: 100,
-            },
-            geo: {
-              type: ["string", "null"],
-              description:
-                "Country most relevant to the news, or null if unclear",
-            },
-          },
-          required: [
-            "bulletPoints",
-            "extendedSummary",
-            "riskScore",
-            "integrityLabel",
-            "integrityConfidence",
-            "geo",
-          ],
-          additionalProperties: false,
-        },
-        strict: true,
-      },
-    },
+    // Ne koristimo response_format – dobijemo tekst i sami parsiramo JSON
   });
 
-  // kod /v1/responses output je u ovoj strukturi
-  const output = response.output?.[0]?.content?.[0]?.json;
+  const raw = response.output?.[0]?.content?.[0]?.text;
 
-  if (!output) {
+  if (!raw) {
     console.error(
-      "❌ Neočekivani OpenAI response shape:",
+      "❌ Neočekivani OpenAI response (nema text outputa):",
       JSON.stringify(response, null, 2)
     );
-    throw new Error("Invalid AI response");
+    throw new Error("Invalid AI response (no text)");
   }
 
+  // počisti eventualne ```json ... ``` markdown fenceove
+  let cleaned = raw.trim();
+
+  if (cleaned.startsWith("```")) {
+    // makni početni ``` ili ```json
+    cleaned = cleaned.replace(/^```[a-zA-Z]*\s*/, "");
+    // makni završni ```
+    cleaned = cleaned.replace(/```$/, "").trim();
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch (e) {
+    console.error("❌ Ne mogu parsirati AI JSON:", cleaned);
+    throw new Error("Failed to parse AI JSON");
+  }
+
+  // osiguraj default vrijednosti ako model nešto izostavi
   return {
-    bulletPoints: output.bulletPoints,
-    extendedSummary: output.extendedSummary,
-    riskScore: output.riskScore,
-    integrityLabel: output.integrityLabel,
-    integrityConfidence: output.integrityConfidence,
-    geo: output.geo,
+    bulletPoints: parsed.bulletPoints || [],
+    extendedSummary: parsed.extendedSummary || "",
+    riskScore: parsed.riskScore ?? 50,
+    integrityLabel: parsed.integrityLabel || "needs-checking",
+    integrityConfidence: parsed.integrityConfidence ?? 50,
+    geo: parsed.geo ?? null,
   };
 }
 
 function buildPrompt(article) {
   const maxText = article.cleanText?.slice(0, 4000) || "";
 
+  // modelu jasno kažemo da VRATI SAMO JSON
   return `
-You are a cybersecurity news analyst. Analyze the following article and return JSON that matches the provided schema.
+You are a cybersecurity news analyst.
+
+Analyze the following article and respond ONLY with a single valid JSON object, no explanations, no extra text.
+
+The JSON MUST have exactly these keys:
+{
+  "bulletPoints": string[],          // 3–5 short bullet points
+  "extendedSummary": string,         // 1–3 paragraphs, neutral tone
+  "riskScore": number,               // 0–100 (0 = low/no risk, 100 = extreme risk)
+  "integrityLabel": string,          // "reliable" | "suspicious" | "needs-checking"
+  "integrityConfidence": number,     // 0–100
+  "geo": string | null               // country (e.g. "US", "Germany") or null
+}
 
 Article title: ${article.title || "N/A"}
 Source: ${article.source || "N/A"}
@@ -118,14 +107,6 @@ Link: ${article.link || "N/A"}
 
 Content:
 ${maxText}
-
-Guidelines:
-- bulletPoints: 3-5 short, clear bullet points summarizing the core information.
-- extendedSummary: 1–3 paragraphs, neutral tone, no fluff.
-- riskScore: 0-100, where 0 = no risk / purely informational, 100 = extremely critical security risk.
-- integrityLabel: "reliable" if information appears well-sourced and typical for The Hacker News; "suspicious" if it feels like potential misinformation or hype; "needs-checking" if important but verification is needed.
-- integrityConfidence: 0-100 confidence in your integrityLabel.
-- geo: a country most relevant to the news (e.g. US, UK, Germany) or null if not obvious.
 `;
 }
 
