@@ -27,7 +27,6 @@ function FilterForm({ onSubmit }) {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [strictness, setStrictness] = useState("medium");
   const [contentType, setContentType] = useState("all");
-  const [heatmapEnabled, setHeatmapEnabled] = useState(false);
   const [mode, setMode] = useState("risk");
 
   const toggleInterest = (value) => {
@@ -45,7 +44,6 @@ function FilterForm({ onSubmit }) {
       interests: selectedInterests,
       strictness,
       contentType,
-      heatmap: heatmapEnabled,
       mode,
     };
 
@@ -151,18 +149,7 @@ function FilterForm({ onSubmit }) {
           </select>
         </div>
 
-        {/* Heatmap toggle */}
-        <div className="filter-group filter-heatmap">
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={heatmapEnabled}
-              onChange={(e) => setHeatmapEnabled(e.target.checked)}
-            />
-            <span className="toggle-slider" />
-            <span className="toggle-label">Prikaži heatmapu</span>
-          </label>
-        </div>
+
 
         <div className="filter-actions">
           <button type="submit" className="primary-btn">

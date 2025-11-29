@@ -1,16 +1,16 @@
-/* ============= */
-/*  FINTECH THEME */
-/* ============= */
+/* =========================================
+   GLOBAL FINTECH / iOS 18 THEME
+   ========================================= */
+
+/* ---------- 1. VARS ---------- */
 
 :root {
   --bg: #020617;
-  --bg-elevated: #020617;
   --bg-card: rgba(15, 23, 42, 0.98);
   --bg-card-soft: rgba(15, 23, 42, 0.9);
-  --bg-chip: rgba(15, 23, 42, 0.9);
 
-  --border-subtle: rgba(148, 163, 184, 0.45);
-  --border-strong: rgba(94, 234, 212, 0.9);
+  --border-subtle: rgba(148, 163, 184, 0.4);
+  --border-strong: rgba(56, 189, 248, 0.9);
 
   --text-main: #f9fafb;
   --text-muted: #9ca3af;
@@ -18,64 +18,22 @@
   --text-link: #22d3ee;
 
   --accent: #22c55e;
-  --accent-soft: rgba(34, 197, 94, 0.16);
+  --accent-soft: rgba(34, 197, 94, 0.22);
   --accent-warn: #eab308;
   --accent-danger: #ef4444;
 
-  --chip-bg: rgba(15, 23, 42, 0.95);
-  --chip-active-bg: rgba(34, 197, 94, 0.15);
-  --chip-active-border: rgba(34, 197, 94, 0.9);
-
+  --card-radius-lg: 22px;
   --card-radius: 18px;
-  --shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.9);
 
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
-      --cursor-x: 20%;
-  --cursor-y: 0%;
 }
 
 html.dark {
   --bg: #020617;
-  --bg-elevated: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
-  --bg-card: rgba(15, 23, 42, 0.98);
-  --bg-card-soft: rgba(15, 23, 42, 0.9);
-  --bg-chip: rgba(15, 23, 42, 0.96);
-
-  --text-main: #f9fafb;
-  --text-muted: #9ca3af;
-  --text-soft: #6b7280;
-  --text-link: #22d3ee;
-
-  --accent: #22c55e;
-  --accent-soft: rgba(34, 197, 94, 0.18);
-  --accent-warn: #eab308;
-  --accent-danger: #ef4444;
-
-  --chip-bg: rgba(15, 23, 42, 0.96);
-  --chip-active-bg: rgba(34, 197, 94, 0.24);
-  --chip-active-border: rgba(34, 197, 94, 1);
-
-  --card-radius: 18px;
-  --shadow-soft: 0 22px 70px rgba(15, 23, 42, 0.95);
-  --bg: #f3d9dc;
-  --bg-alt: #f9e5ea;
-  --card-bg: rgba(249, 243, 244, 0.85);
-  --accent: #6b2643;
-  --accent-soft: #c28ca3;
-  --accent-strong: #3a1023;
-  --text-main: #2d0c1d;
-  --text-muted: #6a4b5a;
-  --border-subtle: rgba(255, 255, 255, 0.6);
-  --shadow-soft: 0 18px 45px rgba(90, 18, 54, 0.25);
-  --radius-lg: 18px;
-  --radius-pill: 999px;
-  --transition-fast: 150ms ease-out;
-  --transition-md: 220ms ease-out;
-  --bg-1: #ffe6f0;
-  --bg-2: #f3d9dc;
-  --bg-3: #e8c4cf;
 }
+
+/* ---------- 2. RESET ---------- */
 
 *,
 *::before,
@@ -83,200 +41,266 @@ html.dark {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
   font-family: var(--font-sans);
-  background: var(--bg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  background: radial-gradient(circle at 0 0, var(--bg-1), var(--bg-2) 40%, var(--bg-3));
+  background-color: #141131; /* tamna pozadina ispod Vante */
   color: var(--text-main);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ROOT SHELL */
-
-
-
-/* THEME TOGGLE BTN */
-
-.theme-toggle-btn {
-  position: fixed;
-  top: 1.1rem;
-  right: 1.4rem;
-  z-index: 40;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  padding: 0.35rem 0.9rem;
-  font-size: 0.8rem;
-  background: rgba(15, 23, 42, 0.92);
-  color: var(--text-muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  cursor: pointer;
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(12px);
+a {
+  color: var(--text-link);
+  text-decoration: none;
 }
 
-.theme-toggle-btn:hover {
-  border-color: var(--accent);
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 3. APP LAYOUT (bez backgrounda – to radi Vanta) ---------- */
+
+.vanta-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden; /* da canvas ne štrči */
+}
+
+
+.app-root {
+  position: relative;
+  z-index: 1; /* da bude iznad Vanta canvasa */
+
+  min-height: 100vh;
+  width: 100%;
+  padding: 1.4rem 1.7rem 2.1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+
   color: var(--text-main);
+  background: transparent; /* Vanta je ispod */
 }
 
-/* HEADER */
 
 .app-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 1.5rem;
-  margin-bottom: 1.7rem;
+  gap: 1rem;
 }
 
 .app-title {
-  margin: 0;
-  font-size: 1.6rem;
-  letter-spacing: 0.18em;
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: #e5e7eb;
 }
 
-/* “Promijeni filtere” */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* reset filter gumb */
 
 .app-reset-btn {
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border-subtle);
+  padding: 0.4rem 1rem;
+  background: rgba(15, 23, 42, 0.88);
+  color: var(--text-muted);
   font-size: 0.8rem;
-  background: rgba(15, 23, 42, 0.85);
-  color: var(--text-main);
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.8);
+  cursor: pointer;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(18px);
+  transition:
+    border-color 0.18s ease-out,
+    color 0.18s ease-out,
+    box-shadow 0.18s ease-out,
+    transform 0.1s ease-out;
 }
 
 .app-reset-btn:hover {
   border-color: var(--accent);
+  color: #bbf7d0;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 1);
 }
 
-/* MAIN LAYOUT */
+/* dark/light */
 
-.app-main {
-  max-width: 1180px;
-  margin: 0 auto;
-}
+.theme-toggle-btn {
+  position: fixed;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  z-index: 30;
 
-/* SPLASH – fintech style loader */
-  margin-top: 8px;
-  border-radius: 22px;
-  padding: 24px 22px 26px;
-  background: var(--card-bg);
+  border-radius: 999px;
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(16px);
+  background: rgba(15, 23, 42, 0.96);
+  color: var(--text-main);
+  font-size: 0.75rem;
+  padding: 0.45rem 0.9rem;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.9),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+  cursor: pointer;
+  transition:
+    background 0.18s ease-out,
+    border-color 0.18s ease-out,
+    transform 0.1s ease-out,
+    box-shadow 0.18s ease-out;
 }
 
+.theme-toggle-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 1),
+    inset 0 0 0 0.6px rgba(255, 255, 255, 0.1);
+}
 
-/* -------------------- */
-/* 3. Filter screen     */
-/* -------------------- */
+/* ---------- 4. SPLASH (LADYBUG) ---------- */
 
 .splash-root {
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #020617 100%);
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 10% 0%, #0b1120 0, #020617 55%, #000 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.2rem;
   color: var(--text-main);
-  position: relative;
   overflow: hidden;
+  z-index: 999;
 }
 
 .splash-bg-glow {
   position: absolute;
-  width: 420px;
-  height: 420px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(45, 212, 191, 0.2), transparent 70%);
-  filter: blur(1px);
-}
-
-.ladybug-track {
-  width: 260px;
-  height: 260px;
-  border-radius: 999px;
-  border: 1px dashed rgba(148, 163, 184, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.ladybug {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #22c55e, #22d3ee);
-  box-shadow: 0 0 18px rgba(34, 197, 94, 0.9);
-  position: absolute;
-  animation: orbit 2.6s ease-in-out infinite;
-}
-
-@keyframes orbit {
-  0% {
-    transform: rotate(0deg) translateX(120px);
-  }
-  100% {
-    transform: rotate(360deg) translateX(120px);
-  }
+  inset: -20%;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.45) 0, transparent 55%),
+    radial-gradient(circle at 90% 110%, rgba(34, 197, 94, 0.4) 0, transparent 55%);
+  filter: blur(4px);
+  opacity: 0.85;
 }
 
 .splash-text {
-  margin-top: 1.3rem;
+  position: relative;
   font-size: 0.9rem;
   color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-/* FILTER FORM */
+.ladybug-track {
+  position: relative;
+  width: 240px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 1),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+@keyframes ladybugWalk {
+  0% {
+    transform: translateX(-10%);
+  }
+  50% {
+    transform: translateX(110%);
+  }
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+.ladybug {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #f97373 0, #b91c1c 65%);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.8),
+    0 0 0 2px rgba(15, 23, 42, 1);
+  animation: ladybugWalk 2.4s ease-in-out infinite;
+}
+
+/* ---------- 5. FILTER SCREEN (MANJA, KOMPRESIRANA) ---------- */
 
 .filter-screen {
-  background: var(--bg-card);
-  border-radius: var(--card-radius);
-  padding: 1.7rem 1.8rem 1.9rem;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(148, 163, 184, 0.45);
+  max-width: 900px;
+  margin: 0 auto 1rem;
+  border-radius: var(--card-radius-lg);
+  background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.98),
+      rgba(15, 23, 42, 0.9)
+    );
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(22px);
+  padding: 1.3rem 1.5rem 1.4rem;
 }
 
 .filter-title {
-  margin: 0 0 0.35rem;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
+  margin: 0;
+  color: #e5e7eb;
 }
 
 .filter-subtitle {
-  margin: 0 0 1.1rem;
-  font-size: 0.86rem;
-  color: var(--text-muted);
+  margin: 0.25rem 0 1rem;
+  font-size: 0.82rem;
+  color: var(--text-soft);
 }
 
 .filter-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
-  gap: 1.5rem 2.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
 }
 
 .filter-group {
-  padding: 0.65rem 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  border-radius: 5px;
 }
 
 .filter-group-title {
-  margin: 0 0 0.45rem;
   font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--text-soft);
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 /* chips */
@@ -284,91 +308,97 @@ body {
 .filter-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
+.chip {
+  position: relative;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #e5edff;
 
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.12) 0, transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.98) 0, #020617 60%);
+  box-shadow:
+    0 10px 24px rgba(15, 23, 42, 0.95),
+    inset 0 0 0 0.4px rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    border-color 0.15s ease-out,
+    background 0.15s ease-out;
+}
 
-/* strictness radios */
+.chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(148, 163, 184, 0.85);
+  box-shadow:
+    0 14px 30px rgba(15, 23, 42, 1),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+}
+
+.chip-active {
+  border-color: rgba(56, 189, 248, 0.9);
+  color: #bbf7d0;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.45) 0, transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.9) 0, #020617 60%);
+  box-shadow:
+    0 16px 36px rgba(56, 189, 248, 0.6),
+    inset 0 0 0 0.6px rgba(255, 255, 255, 0.15);
+}
+
+/* strictness radiji */
 
 .filter-strictness {
   display: flex;
-  gap: 0.55rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .radio-pill {
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  padding: 0.22rem 0.6rem;
+  gap: 0.45rem;
+  padding: 0.3rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.45);
-  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: radial-gradient(circle at 0 0, #1f2937 0, #020617 70%);
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.9),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
 .radio-pill input {
-  display: none;
-}
-
-.radio-pill span {
-  position: relative;
-}
-
-.radio-pill input:checked + span::before {
-  content: "";
-  position: absolute;
-  left: -0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--accent);
-}
-
-.radio-pill input:checked + span {
-  color: var(--accent);
-}
-
-/* selects */
-
-.filter-select {
-  width: 100%;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  background: rgba(15, 23, 42, 0.92);
-  color: var(--text-main);
-  padding: 0.4rem 0.9rem;
-  font-size: 0.82rem;
+  margin: 0;
 }
 
 /* toggle */
 
-.filter-heatmap {
-  display: flex;
-  align-items: center;
-}
-
 .toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  cursor: pointer;
-}
-
-.toggle input {
-  display: none;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
 }
 
 .toggle-slider {
   width: 34px;
   height: 18px;
   border-radius: 999px;
-  background: rgba(30, 64, 175, 0.9);
+  background: rgba(30, 64, 175, 0.95);
   position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(15, 23, 42, 0.7),
+    0 4px 10px rgba(15, 23, 42, 0.9);
 }
 
 .toggle-slider::after {
@@ -379,732 +409,94 @@ body {
   width: 14px;
   height: 14px;
   border-radius: 999px;
-  background: #e5e7eb;
+  background: radial-gradient(circle at 30% 20%, #ffffff 0, #e5e7eb 35%, #cbd5f5 100%);
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.8),
+    0 0 0 0.5px rgba(255, 255, 255, 0.7);
   transition: transform 0.2s ease-out;
 }
 
+.toggle input {
+  display: none;
+}
+
 .toggle input:checked + .toggle-slider::after {
-  transform: translateX(12px);
+  transform: translateX(14px);
 }
 
-.toggle-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
+/* ---------- DROPDOWN ---------- */
 
-/* primary button (used i u overlayu) */
-
-.primary-btn {
+.filter-select {
+  max-width: 360px;
+  width: 100%;
+  height: 36px;
   border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, #22c55e, #22d3ee);
-  color: #020617;
-  font-weight: 600;
-  font-size: 0.85rem;
-  padding: 0.55rem 1.3rem;
+  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.9));
+  color: var(--text-main);
+  padding: 0 2.3rem 0 0.9rem;
+  font-size: 0.8rem;
+  outline: none;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
-  box-shadow: 0 15px 40px rgba(34, 197, 94, 0.45);
+  background-image:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.9)),
+    url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7L10 12L15 7' stroke='%23CBD5F5' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, right 0.8rem center;
+  background-size: auto, 14px;
 }
 
-.primary-btn:hover {
-  filter: brightness(1.02);
+/* Dark tema za otvoreni dropdown (options) */
+
+.filter-select option {
+  background-color: #020617;   /* tamna pozadina */
+  color: #e5e7eb;              /* svijetli tekst */
 }
 
-/* actions */
+/* hover / selected state */
+
+.filter-select option:hover,
+.filter-select option:checked {
+  background-color: #111827;   /* malo svjetlije kad je preko toga */
+  color: #f9fafb;
+}
+
+.filter-select:focus {
+  border-color: rgba(56, 189, 248, 0.85);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+}
+
+
+/* actions pri dnu forme */
 
 .filter-actions {
-  grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
-  margin-top: 0.5rem;
+  gap: 0.6rem;
 }
 
-/* FEED LAYOUT */
-
-.feed-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(260px, 1.2fr);
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.feed-main {
-  background: var(--bg-card);
-  border-radius: var(--card-radius);
-  padding: 1.4rem 1.5rem 1.6rem;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(148, 163, 184, 0.5);
-}
-
-.feed-grid {
-  margin-top: 1.2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
-}
-
-/* sidebar */
-
-.feed-sidebar {
-  background: var(--bg-card);
-  border-radius: var(--card-radius);
-  padding: 1.1rem 1.2rem 1.3rem;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  font-size: 0.8rem;
-}
-
-.feed-sidebar h3 {
-  margin: 0 0 0.6rem;
-  font-size: 0.86rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.geo-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0.6rem;
-}
-
-.geo-list li {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-}
-
-.geo-count {
-  font-weight: 600;
-}
-
-.geo-hint {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.7rem;
-}
-
-/* feed status */
-
-.feed-status {
-  background: var(--bg-card);
-  border-radius: var(--card-radius);
-  padding: 1.2rem 1.4rem;
-  text-align: center;
-  color: var(--text-muted);
-  border: 1px dashed rgba(148, 163, 184, 0.5);
-}
-
-.feed-status.error {
-  color: var(--accent-danger);
-}
-
-/* ARTICLE CARD */
-
-.article-card {
-  background: var(--bg-card-soft);
-  border-radius: 16px;
-  padding: 0.95rem 1rem 0.9rem;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-.article-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.95);
-  transform: translateY(-2px);
-}
-
-.card-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.article-title {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  font-size: 0.7rem;
-}
-
-.meta-pill {
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.meta-muted {
-  color: var(--text-soft);
-}
-
-/* badges */
-
-.card-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  font-size: 0.72rem;
-}
-
-.badge {
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.badge-risk {
-  border: none;
-  font-weight: 600;
-}
-
-.risk-low {
-  background: rgba(34, 197, 94, 0.18);
-  color: #4ade80;
-}
-
-.risk-medium {
-  background: rgba(234, 179, 8, 0.18);
-  color: #fde68a;
-}
-
-.risk-high {
-  background: rgba(248, 113, 113, 0.24);
-  color: #fecaca;
-}
-
-.risk-unknown {
-  background: rgba(148, 163, 184, 0.2);
-  color: #e5e7eb;
-}
-
-.badge-integrity {
-  background: rgba(30, 64, 175, 0.2);
-  color: #bfdbfe;
-}
-
-.badge-geo {
-  background: rgba(17, 24, 39, 0.9);
-  color: var(--text-muted);
-}
-
-/* bullets */
-
-.article-bullets {
-  margin: 0.35rem 0 0.2rem;
-  padding-left: 1rem;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.article-bullets li {
-  margin-bottom: 0.15rem;
-}
-
-/* footer links */
-
-.card-footer {
-  margin-top: 0.1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.78rem;
-}
-
-.link-btn {
-  border: none;
-  background: none;
-  color: var(--text-link);
-  font-size: 0.78rem;
-  padding: 0;
-  cursor: pointer;
-}
-
-.link-btn.subtle {
-  color: var(--text-soft);
-}
-
-.link-btn.subtle:hover {
-  color: var(--text-link);
-}
-
-/* OVERLAY (article details) */
-
-.overlay-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(2, 6, 23, 0.88);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-}
-
-.overlay-card {
-  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #020617 100%);
-  padding: 1.6rem 1.7rem 1.4rem;
-  border-radius: 20px;
-  width: min(700px, 92vw);
-  color: var(--text-main);
-  max-height: 82vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.6);
-}
-
-.overlay-close {
-  position: absolute;
-  top: 14px;
-  right: 18px;
-  font-size: 20px;
-  border: none;
-  background: none;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-
-.overlay-close:hover {
-  color: var(--text-main);
-}
-
-.overlay-header {
-  margin-bottom: 0.6rem;
-}
-
-.overlay-title {
-  margin: 0 0 0.4rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.overlay-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  font-size: 0.72rem;
-}
-
-.overlay-body {
-  font-size: 0.86rem;
-  color: var(--text-main);
-  line-height: 1.5;
-  margin-top: 0.6rem;
-}
-
-.overlay-summary {
-  margin: 0;
-}
-
-.overlay-footer {
-  margin-top: 1rem;
-}
-
-/* RISK BAROMETER */
-
-.risk-barometer-card {
-  background: rgba(15, 23, 42, 0.96);
-  border-radius: 20px;
-  padding: 1.2rem 1.3rem;
-  margin-bottom: 1.2rem;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-.filter-screen {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 40px;
-  background: var(--card-bg);
-  border-radius: 22px;
-  padding: 20px 28px;
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(12px);
-}
-
-/* --------------------------- */
-/* DARK MODE — Filter Screen   */
-/* --------------------------- */
-
-.dark {
-  --card-bg: rgba(35, 27, 38, 0.85);
-  --text-main: #f6eefe;
-  --text-muted: #c7b7d0;
-  --accent: #d870a1;
-  --accent-soft: #a45578;
-  --accent-strong: #ffb4d0;
-}
-
-
-.dark .filter-screen {
-  background: rgba(30, 22, 36, 0.85);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Chips */
-.dark .chip {
-  background: linear-gradient(
-    135deg,
-    var(--card-bg-soft),
-    var(--card-bg-solid)
-  );
-  color: var(--text-main);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: none;
-  --bg-1: #1a0f18;
-  --bg-2: #130b12;
-  --bg-3: #0c070d;
-}
-
-.dark .chip-active {
-  background: radial-gradient(circle at 0 0, #a83c75, #7d2952);
-  color: #fff;
-}
-
-/* Radio pills */
-.dark .radio-pill {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: none;
-  color: var(--text-main);
-}
-
-.dark .radio-pill input:checked + span {
-  color: var(--accent);
-}
-
-/* Selects */
-.dark .filter-select {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-main);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
-    linear-gradient(135deg, var(--accent) 50%, transparent 50%);
-}
-
-/* Toggle */
-.dark .toggle-slider {
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
-}
-
-.dark .toggle-slider::before {
-  background: #fff;
-}
-
-.dark .toggle input:checked + .toggle-slider {
-  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
-}
-
-/* Labels */
-.dark .toggle-label,
-.dark .filter-group-title,
-.dark .filter-subtitle {
-  color: var(--text-main);
-}
-
-/* Button */
-.dark .primary-btn {
-  background: linear-gradient(135deg, #7d2952, #c24c89);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
-}
-
-.theme-toggle-btn {
-  position: fixed;
-  top: 22px;
-  right: 22px;
-  z-index: 9999;
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-subtle);
-  background: var(--card-bg);
-  color: var(--text-main);
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
-  transition: background 0.25s, color 0.25s, box-shadow 0.25s;
-}
-
-.theme-toggle-btn:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-}
-
-.dark body,
-.dark .app-root,
-.dark .app-main,
-.dark .filter-screen,
-.dark * {
-  color: var(--text-main) !important;
-}
-
-.dark .filter-screen,
-.dark .filter-screen * {
-  color: var(--text-main) !important;
-}
-/* KARTICA BAROMETRA */
-.risk-barometer-card {
-  background: #ffe4ec;              /* ista paleta kao ostatak */
-  border-radius: 24px;
-  padding: 1.3rem 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 18px 45px rgba(148, 27, 89, 0.15);
-}
-
-/* HEADER (naslov + SEVERE badge) */
-.risk-barometer-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.4rem;
-}
-
-.risk-barometer-header h2 {
-  margin: 0;
-  font-size: 0.88rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.risk-barometer-tag {
-  padding: 0.18rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-/* LAYOUT UNUTAR KARTICE: gauge + tekst */
-.risk-barometer-content {
-  display: flex;
-  align-items: center;
-  gap: 1.6rem;
-  flex-wrap: wrap;
-}
-
-/* SVG GUMENI MJERAC */
-.risk-barometer-gauge {
-  min-width: 220px;
-}
-
-.risk-barometer-gauge svg {
-  width: 220px;
-  height: auto;
-  display: block;
-}
-
-.risk-needle {
-  transition: transform 0.5s ease-out;
-}
-
-/* 0 – 50 – 100 ispod luka */
-.risk-barometer-scale-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.15rem;
-  font-size: 0.7rem;
-  color: var(--text-soft);
-}
-
-/* BLOK S BROJKAMA I OPISOM */
-.risk-barometer-info {
-  min-width: 180px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.risk-barometer-main {
-  display: flex;
-  align-items: baseline;
-  gap: 0.18rem;
-}
-
-.risk-barometer-main-value {
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.risk-barometer-main-unit {
-  font-size: 0.8rem;
-}
-
-.risk-barometer-description {
-  margin: 0;
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-/* DVIJE MALENE STATISTIKE ISPOD */
-.risk-barometer-secondaries {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.1rem;
-  margin-top: 0.25rem;
-}
-
-.risk-barometer-label {
-  display: block;
-  font-size: 0.7rem;
-  color: var(--text-soft);
-}
-
-.risk-barometer-value {
-  display: block;
-  font-size: 0.86rem;
-  font-weight: 600;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 960px) {
-  .filter-form {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .feed-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* KAD NEMA PODATAKA */
-.risk-barometer-empty {
-  margin: 0.4rem 0 0;
-  font-size: 0.78rem;
-}
-
-/* KAZALJKA – može imati laganu tranziciju kad se promijeni vrijednost */
-.risk-needle {
-  transition: transform 0.5s ease-out;
-}
-
-/* RESPONSIVE za mobitele */
-@media (max-width: 640px) {
-  .app-root {
-    padding: 1.1rem 1rem 1.8rem;
-  }
-
-  .app-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .theme-toggle-btn {
-    top: 0.75rem;
-    right: 0.9rem;
-  }
-
-  .risk-barometer-gauge svg {
-    width: 190px;
-  }
-}
-
-.app-root {
-  position: relative;
-  min-height: 100vh;
-  padding: 1.75rem 1.8rem 2.5rem;
-  color: var(--text-main);
-
-  /* interaktivni techno gradient */
-  background:
-    radial-gradient(
-      circle at var(--cursor-x) var(--cursor-y),
-      rgba(56, 189, 248, 0.28) 0,
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at 80% 90%,
-      rgba(34, 197, 94, 0.22) 0,
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at 10% 120%,
-      rgba(129, 140, 248, 0.24) 0,
-      transparent 55%
-    ),
-    #020617;
-  background-attachment: fixed;
-  transition: background 0.12s ease-out;
-  overflow: hidden;
-}
-
-/* suptilna grid mreža preko svega */
-.app-root::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(
-      rgba(15, 23, 42, 0.6) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(15, 23, 42, 0.6) 1px,
-      transparent 1px
-    );
-  background-size: 140px 140px;
-  opacity: 0.32;
-  pointer-events: none;
-  z-index: -1;
-}
-
-
-
-
-/* GLASS KARTICE – filter screen, main, sidebar, overlay, barometer */
-.filter-screen,
-.feed-main,
-.feed-sidebar,
-.risk-barometer-card,
-.overlay-card {
-  background: linear-gradient(
-      135deg,
-      rgba(15, 23, 42, 0.95),
-      rgba(15, 23, 42, 0.8)
-    );
-  border-radius: 28px;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  box-shadow:
-    0 28px 80px rgba(15, 23, 42, 0.95),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(22px);
-}
-
-/* filter-screen malo većeg paddinga da izgleda “card” */
-.filter-screen {
-  padding: 2.1rem 2.2rem 2.2rem;
-}
-
-
-
-/* primary gumb – jači glow, iOS look */
 .primary-btn {
   border-radius: 999px;
+  border: none;
   background: radial-gradient(circle at 0 0, #4ade80 0, #22d3ee 40%, #22c55e 90%);
   color: #020617;
+  font-weight: 600;
+  font-size: 0.86rem;
+  padding: 0.55rem 1.6rem;
+  cursor: pointer;
   box-shadow:
     0 18px 40px rgba(34, 197, 94, 0.55),
-    0 0 0 1px rgba(15, 23, 42, 0.6);
-  padding: 0.6rem 1.6rem;
+    0 0 0 1px rgba(15, 23, 42, 0.7);
   transform: translateY(0);
   transition:
-    transform 0.12s ease-out,
-    box-shadow 0.12s ease-out,
-    filter 0.12s ease-out;
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    filter 0.15s ease-out;
 }
 
 .primary-btn:hover {
@@ -1112,64 +504,111 @@ body {
   filter: brightness(1.03);
   box-shadow:
     0 22px 55px rgba(34, 197, 94, 0.7),
-    0 0 0 1px rgba(15, 23, 42, 0.6);
+    0 0 0 1px rgba(15, 23, 42, 0.7);
 }
 
-/* select – više iOS/glass */
-.filter-select {
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  background: radial-gradient(circle at 0 0, #1e293b 0, #020617 60%);
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
-  font-size: 0.84rem;
+/* ---------- 6. FEED LAYOUT ---------- */
+
+.feed-layout {
+  /* umjesto 2 stupca → sve ide u jedan stupac full width */
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  align-items: stretch;
 }
 
-/* strictness + mode “pillovi” – 3D */
-.radio-pill {
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  background: radial-gradient(circle at 0 0, #1f2937 0, #020617 60%);
-  box-shadow:
-    0 8px 18px rgba(15, 23, 42, 0.9),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+
+.feed-main,
+.feed-sidebar {
+  border-radius: var(--card-radius-lg);
+  background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.98),
+      rgba(15, 23, 42, 0.9)
+    );
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
 }
 
-.radio-pill input:checked + span {
-  color: #4ade80;
+.feed-main {
+  padding: 1.2rem 1.3rem 1.4rem;
 }
 
-/* toggle – iOS switch */
-.toggle-slider {
-  background: rgba(30, 64, 175, 0.95);
-  box-shadow:
-    inset 0 0 0 1px rgba(15, 23, 42, 0.7),
-    0 4px 10px rgba(15, 23, 42, 0.9);
+.feed-sidebar {
+  padding: 1.1rem 1.2rem 1.3rem;
 }
 
-.toggle-slider::after {
-  background: radial-gradient(circle at 30% 20%, #ffffff 0, #e5e7eb 35%, #cbd5f5 100%);
-  box-shadow:
-    0 4px 8px rgba(15, 23, 42, 0.8),
-    0 0 0 0.5px rgba(255, 255, 255, 0.7);
+.feed-status {
+  border-radius: var(--card-radius);
+  padding: 0.9rem 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
 }
 
-/* ARTICLE CARD – 3D dashboard tile */
+.feed-status.error {
+  color: #fecaca;
+  border-color: var(--accent-danger);
+}
+
+.feed-grid {
+  display: grid;
+  /* šire kartice, 3–4 po redu ovisno o širini ekrana */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.1rem;
+  margin-top: 1.1rem;
+}
+
+
+/* geo lista */
+
+.geo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.7rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.geo-count {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.geo-hint {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+}
+
+/* ---------- 7. ARTICLE CARD ---------- */
+
 .article-card {
-  border-radius: 18px;
+  border-radius: var(--card-radius);
   background: linear-gradient(
       145deg,
       rgba(15, 23, 42, 0.98),
-      rgba(15, 23, 42, 0.86)
+      rgba(15, 23, 42, 0.9)
     );
-  border: 1px solid rgba(148, 163, 184, 0.45);
+  border: 1px solid var(--border-subtle);
   box-shadow:
     0 16px 40px rgba(15, 23, 42, 0.95),
     inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+  padding: 0.85rem 0.95rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   transform: translateY(0);
   transition:
-    transform 0.12s ease-out,
-    box-shadow 0.12s ease-out,
-    border-color 0.12s ease-out;
+    transform 0.16s ease-out,
+    box-shadow 0.16s ease-out,
+    border-color 0.16s ease-out;
 }
 
 .article-card:hover {
@@ -1177,263 +616,306 @@ body {
   border-color: rgba(56, 189, 248, 0.9);
   box-shadow:
     0 22px 60px rgba(15, 23, 42, 1),
-    0 0 0 1px rgba(56, 189, 248, 0.35);
+    0 0 0 1px rgba(56, 189, 248, 0.3);
 }
 
-/* risk barometer – malo više 3D oko gaugea */
-.risk-barometer-card {
-  border-radius: 24px;
-}
-
-.risk-barometer-gauge svg {
-  filter: drop-shadow(0 8px 20px rgba(15, 23, 42, 0.9));
-}
-
-
-/* =============================== */
-/* TECHY INTERACTIVE BACKGROUND    */
-/* =============================== */
-
-
-
-
-
-
-@keyframes floatGradient {
-  0% {
-    transform: translate3d(-10px, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(20px, -20px, 0) scale(1.05);
-  }
-  100% {
-    transform: translate3d(-15px, 10px, 0) scale(1.02);
-  }
-}
-
-/* UPDATE chipova – manje bijeli, više teal/cyber */
-
-.chip {
-  position: relative;
-  border-radius: 999px;
-  padding: 0.4rem 0.95rem;
-  font-size: 0.8rem;
-  border: 1px solid rgba(148, 163, 184, 0.4); /* manje bijelo */
-  color: #cbd5f5;
-
-  background:
-    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.09) 0, transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.95) 0, #020617 55%);
-  box-shadow:
-    0 8px 20px rgba(15, 23, 42, 0.9),
-    inset 0 0 0 0.4px rgba(255, 255, 255, 0.05);
-  transition:
-    transform 0.12s ease-out,
-    box-shadow 0.12s ease-out,
-    border-color 0.12s ease-out,
-    background 0.12s ease-out;
-}
-
-.chip-active {
-  border-color: rgba(56, 189, 248, 0.75);
-  color: #bbf7d0;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.32) 0, transparent 45%),
-    radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.8) 0, #020617 60%);
-  box-shadow:
-    0 14px 32px rgba(56, 189, 248, 0.55),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
-}
-
-.chip:hover {
-  transform: translateY(-1px);
-  border-color: rgba(148, 163, 184, 0.7);
-  box-shadow:
-    0 12px 26px rgba(15, 23, 42, 0.95),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
-.risk-needle {
-  transition: transform 0.5s ease-out;
-}
-
-/* ------------------------------------------------ */
-/*  DARK MODE – GLOBAL BACKGROUND                   */
-/* ------------------------------------------------ */
-
-/* Tamna pozadina cijelog bodyja */
-.dark body {
-  background: radial-gradient(
-    circle at 0 0,
-    #1a0f18,
-    #130b12 40%,
-    #0c070d 100%
-  ) !important;
-}
-
-/* app-root pozadina tamna */
-.dark .app-root {
-  background: transparent !important;
-}
-
-/* Tamni card-bg radi svih elemenata */
-.dark {
-  --bg: #1a0f18;
-  --bg-alt: #130b12;
-  --bg-1: #1a0f18;
-  --bg-2: #130b12;
-  --bg-3: #0c070d;
-}
-
-/* Splash screen tamna verzija */
-.dark .splash-root {
-  background: radial-gradient(
-    circle at 0 0,
-    #2a1623 0%,
-    #130b12 45%,
-    #050305 110%
-  ) !important;
-}
-
-.dark .splash-bg-glow {
-  background: radial-gradient(circle, #4d3b4a, #1a0f18 60%, transparent 70%);
-  opacity: 0.25;
-}
-
-/* Layout oko Feeda, sidebar + heatmap */
-.feed-layout {
+.card-header {
   display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
-.feed-main {
-  flex: 1 1 auto;
+.article-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #e5e7eb;
 }
 
-/* Grid kartica – prilagodi ako već postoji */
-.feed-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
 }
 
-/* Sidebar za Geo activity */
-.feed-sidebar {
-  width: 260px;
-  padding: 1.25rem 1rem;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 1.25rem;
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
-  font-size: 0.85rem;
+.meta-pill {
+  font-size: 0.7rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.95);
 }
 
-.feed-sidebar h3 {
-  font-weight: 700;
-  margin-bottom: 0.75rem;
+.card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
 }
 
-.geo-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0.75rem;
+.badge {
+  font-size: 0.7rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.96);
+  color: var(--text-muted);
+}
+
+.badge-integrity {
+  border-color: rgba(56, 189, 248, 0.8);
+  color: #e0f2fe;
+}
+
+.badge-geo {
+  border-color: rgba(234, 179, 8, 0.8);
+  color: #fef9c3;
+}
+
+.badge-risk {
+  border-color: rgba(239, 68, 68, 0.9);
+  color: #fee2e2;
+}
+
+.article-bullets {
+  margin: 0.3rem 0 0.4rem;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+}
+
+.article-bullets li + li {
+  margin-top: 0.1rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.1rem;
+}
+
+/* link btn */
+
+.link-btn {
+  font-size: 0.76rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  padding: 0.26rem 0.8rem;
+  background: rgba(15, 23, 42, 0.98);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.link-btn.subtle {
+  color: var(--text-muted);
+  border-style: dashed;
+}
+
+/* ---------- 8. OVERLAY ---------- */
+
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 10% 0%, rgba(15, 23, 42, 0.75), rgba(3, 7, 18, 0.95));
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  z-index: 50;
+}
+
+.overlay-card {
+  position: relative;
+  width: min(720px, 100%);
+  max-height: min(560px, 90vh);
+  border-radius: var(--card-radius-lg);
+  background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.98),
+      rgba(15, 23, 42, 0.92)
+    );
+  border: 1px solid var(--border-subtle);
+  box-shadow:
+    0 26px 80px rgba(0, 0, 0, 1),
+    inset 0 0 0 0.6px rgba(255, 255, 255, 0.06);
+  padding: 1.4rem 1.6rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  overflow: hidden;
+}
+
+.overlay-header {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.geo-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.overlay-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #e5e7eb;
 }
 
-.geo-count {
+.overlay-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+}
+
+.overlay-summary {
+  font-size: 0.86rem;
+  color: var(--text-main);
+}
+
+.overlay-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  margin-right: -0.4rem;
+}
+
+.overlay-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 20px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* ---------- 9. RISK BAROMETER & HEATMAP ---------- */
+
+.risk-barometer-card {
+  border-radius: var(--card-radius-lg);
+  background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.98),
+      rgba(15, 23, 42, 0.9)
+    );
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.95);
+  padding: 0.9rem 1rem 1rem;
+  margin-bottom: 1.3rem;
+
+  /* NOVO – reže veliki luk da ne izlazi iz kartice */
+  position: relative;
+  overflow: hidden;
+}
+
+
+.risk-barometer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.risk-barometer-tag {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.risk-barometer-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.risk-barometer-main-value {
+  font-size: 1.35rem;
   font-weight: 600;
 }
 
-.geo-hint {
-  font-size: 0.75rem;
-  color: #6b7280;
+.risk-barometer-main-unit {
+  font-size: 0.78rem;
+  color: var(--text-soft);
 }
 
-/* Heatmap blok */
-.feed-heatmap-wrapper {
-  margin-top: 2rem;
+.risk-barometer-description {
+  margin-top: 0.1rem;
+  font-size: 0.78rem;
+  color: var(--text-soft);
 }
 
-.heatmap-section {
-  margin-top: 1.5rem;
-  padding: 1.5rem 1rem 2rem;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 1.25rem;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
-}
-
-.heatmap-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-}
-
-.heatmap-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #111827;
-}
-
-.heatmap-subtitle {
-  font-size: 0.85rem;
-  color: #4b5563;
-}
-
-.heatmap-map-wrapper {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.heatmap-map {
-  width: 100%;
-  min-height: 260px;
-}
-
-.heatmap-legend {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  color: #374151;
-}
-
-.heatmap-legend-gradient {
-  flex: 1;
-  height: 8px;
+.risk-barometer-gauge {
+  position: relative;
+  margin-top: 0.7rem;
+  height: 6px;
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    #d1fae5 0%,
-    #fde68a 40%,
-    #f97316 75%,
-    #b91c1c 100%
+    #22c55e 0%,
+    #eab308 50%,
+    #ef4444 100%
   );
 }
 
-.heatmap-legend-label {
-  white-space: nowrap;
+.risk-needle {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 14px;
+  background: #e5e7eb;
+  border-radius: 999px;
 }
 
-/* Mobile fallback – sidebar ispod grida */
-@media (max-width: 900px) {
-  .feed-layout {
+
+
+/* ---------- 10. RESPONSIVE ---------- */
+
+@media (max-width: 960px) {
+  .app-root {
+    padding: 1.1rem 1.1rem 1.6rem;
+  }
+
+  .filter-screen {
+    max-width: 100%;
+  }
+
+    .feed-layout {
     flex-direction: column;
   }
 
-  .feed-sidebar {
-    width: 100%;
-    margin-top: 1.5rem;
+
+  .theme-toggle-btn {
+    right: 1.1rem;
+    bottom: 1.1rem;
   }
 }
 
+@media (max-width: 640px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .filter-actions {
+    justify-content: stretch;
+  }
+
+  .primary-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}

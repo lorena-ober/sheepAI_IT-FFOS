@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import * as THREE from "three";
+import NET from "vanta/dist/vanta.net.min";
+
 import "./styles/global.css";
 import FilterForm from "./components/FilterForm.jsx";
 import Feed from "./components/Feed.jsx";
 
+// Splash ekran s bubamarom
 function LadybugSplash({ onFinish }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
-    }, 2600); // trajanje animacije
+    }, 2600); // trajanje splash animacije
+
     return () => clearTimeout(timer);
   }, [onFinish]);
 
@@ -17,7 +22,7 @@ function LadybugSplash({ onFinish }) {
       <div className="ladybug-track">
         <div className="ladybug" />
       </div>
-      <p className="splash-text">Loading your secure feed...</p>
+      <p className="splash-text">Loading your secure feed.</p>
     </div>
   );
 }
@@ -26,22 +31,44 @@ export default function App() {
   const [preferences, setPreferences] = useState(null);
   const [splashDone, setSplashDone] = useState(false);
 
-  // 🔥 DARK MODE TOGGLE
-  const [dark, setDark] = useState(() =>
-    localStorage.getItem("theme") === "dark"
-  );
+
+  // VANTA.NET pozadina
+  const vantaRef = useRef(null);
 
   useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [dark]);
+    // ne pokreći Vantu dok je splash aktivan
+    if (!splashDone) return;
+    if (!vantaRef.current) return;
 
-  // Splash first
+    const effect = NET({
+      el: vantaRef.current,
+      THREE,
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+      scale: 1.0,
+      scaleMobile: 1.0,
+
+      // 🎨 BOJE – fintech / iOS look
+      backgroundColor: 0x050617, // #050617 tamna plavo-ljubičasta
+      color: 0x22d3ee,           // #22D3EE cyan linije
+      showDots: true,
+
+      // mekši network pattern
+      points: 11.0,
+      maxDistance: 23.0,
+      spacing: 18.0,
+    });
+
+    // cleanup
+    return () => {
+      effect.destroy();
+    };
+  }, [splashDone]);
+
+  // dok splash traje
   if (!splashDone) {
     return <LadybugSplash onFinish={() => setSplashDone(true)} />;
   }
@@ -52,38 +79,34 @@ export default function App() {
   };
 
   return (
-    <div className="app-root">
-      {/* 🌙 DARK MODE BUTTON */}
-      <button
-        className="theme-toggle-btn"
-        onClick={() => setDark((d) => !d)}
-      >
-        {dark ? "☀️ Light" : "🌙 Dark"}
-      </button>
+    <div ref={vantaRef} className="vanta-container">
+      <div className="app-root">
 
-      <header className="app-header">
-        <h1 className="app-title">Naziv stranice</h1>
-        {preferences && (
-          <button
-            type="button"
-            className="app-reset-btn"
-            onClick={handleResetPreferences}
-          >
-            Promijeni filtere
-          </button>
-        )}
-      </header>
 
-      <main className="app-main">
-        {!preferences ? (
-          <FilterForm onSubmit={setPreferences} />
-        ) : (
-          <Feed
-            preferences={preferences}
-            onBack={handleResetPreferences}
-          />
-        )}
-      </main>
+        <header className="app-header">
+          <h1 className="app-title">NAZIV STRANICE</h1>
+          {preferences && (
+            <button
+              type="button"
+              className="app-reset-btn"
+              onClick={handleResetPreferences}
+            >
+              Promijeni filtere
+            </button>
+          )}
+        </header>
+
+        <main className="app-main">
+          {!preferences ? (
+            <FilterForm onSubmit={setPreferences} />
+          ) : (
+            <Feed
+              preferences={preferences}
+              onBack={handleResetPreferences}
+            />
+          )}
+        </main>
+      </div>
     </div>
   );
 }
