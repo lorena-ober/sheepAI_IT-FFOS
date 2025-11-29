@@ -612,11 +612,11 @@ html {
   border-radius: 14px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: 0.2s ease;
-}
 
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   transition: 0.2s ease;
 }
+
 .article-card:hover {
   transform: translateY(-4px);
 }
@@ -693,5 +693,3 @@ html {
   background: none;
   cursor: pointer;
 }
-
-
