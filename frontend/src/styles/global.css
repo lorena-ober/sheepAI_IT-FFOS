@@ -1,0 +1,23 @@
+:root {
+  --bg: #f3d9dc;
+  --card-bg: #f9f3f4;
+  --accent: #6b2643;
+  --accent-soft: #c28ca3;
+  --text-main: #3a1023;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+}
+
+/* ovdje ćemo kasnije dodati sve klase za layout + kartice */
