@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../styles/global.css";
 import Dropdown from "./Dropdown.jsx";
 
+
 const INTEREST_OPTIONS = [
   "vulnerabilities",
   "malware",
@@ -12,16 +13,16 @@ const INTEREST_OPTIONS = [
 ];
 
 const CONTENT_TYPE_OPTIONS = [
-  { value: "all", label: "Svi članci" },
+  { value: "all", label: "All articles" },
   { value: "cybersecurity", label: "Cybersecurity" },
   { value: "ai", label: "AI" },
   { value: "vulnerabilities", label: "Vulnerabilities" },
 ];
 
 const MODE_OPTIONS = [
-  { value: "risk", label: "Risk fokus" },
-  { value: "popularity", label: "Popularnost" },
-  { value: "relevance", label: "AI relevantnost" },
+  { value: "risk", label: "Risk focus" },
+  { value: "popularity", label: "Popularity" },
+  { value: "relevance", label: "AI relevance" },
 ];
 
 function FilterForm({ onSubmit }) {
@@ -53,16 +54,16 @@ function FilterForm({ onSubmit }) {
 
   return (
     <section className="filter-screen">
-      <h2 className="filter-title">Prilagodi svoj feed</h2>
+      <h2 className="filter-title">Customize your feed</h2>
       <p className="filter-subtitle">
-        Odaberi teme i način filtriranja vijesti. Kasnije ih uvijek možeš
-        promijeniti.
+        Choose topics and how to filter the news. You can always change this
+        later.
       </p>
 
       <form className="filter-form" onSubmit={handleSubmit}>
         {/* Interests */}
         <div className="filter-group">
-          <h3 className="filter-group-title">Interesi</h3>
+          <h3 className="filter-group-title">Interests</h3>
           <div className="filter-chips">
             {INTEREST_OPTIONS.map((interest) => {
               const active = selectedInterests.includes(interest);
@@ -140,7 +141,7 @@ function FilterForm({ onSubmit }) {
 
         <div className="filter-actions">
           <button type="submit" className="primary-btn">
-            Generiraj feed
+            Generate feed
           </button>
         </div>
       </form>

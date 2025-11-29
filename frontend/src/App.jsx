@@ -84,7 +84,7 @@ export default function App() {
 
 
         <header className="app-header">
-          <h1 className="app-title">NAZIV STRANICE</h1>
+          <h1 className="app-title">TECH BRIEF</h1>
           {preferences && (
             <button
               type="button"
