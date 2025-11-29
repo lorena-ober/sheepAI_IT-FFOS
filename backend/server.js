@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+const newsRoutes = require("./routes/news");
+const analyzeRoutes = require("./routes/analyze");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -16,18 +19,11 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Backend is running" });
 });
 
-// Placeholder: ovdje će kasnije ići vijesti
-app.get("/api/news", (req, res) => {
-  res.json([]); // za sada samo prazno
-});
-
-// Placeholder: ovdje će kasnije ići AI analiza
-app.post("/api/analyze", (req, res) => {
-  res.json({ message: "Not implemented yet" });
-});
+// API rute
+app.use("/api/news", newsRoutes);
+app.use("/api/analyze", analyzeRoutes);
 
 // Pokretanje servera
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
 });
-    
