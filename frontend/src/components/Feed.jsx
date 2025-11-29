@@ -131,11 +131,8 @@ export default function Feed({ preferences }) {
       </section>
 
       {preferences.heatmap && (
-<<<<<<< Updated upstream
         <aside className="feed-sidebar">
-=======
         <aside className="feed-sidebar" aria-label="Geo activity sidebar">
->>>>>>> Stashed changes
           <h3>Geo activity</h3>
           <ul className="geo-list">
             {Object.entries(geoCounts).map(([country, count]) => (
