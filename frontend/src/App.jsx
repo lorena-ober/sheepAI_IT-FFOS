@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+// frontend/src/App.jsx
+import React, { useEffect, useState } from "react";
 import "./styles/global.css";
 import FilterForm from "./components/FilterForm.jsx";
 import Feed from "./components/Feed.jsx";
 
 function LadybugSplash({ onFinish }) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onFinish();
-    }, 2600); // trajanje animacije u ms, sinkronizirano s CSS-om
+    const timer = setTimeout(onFinish, 2600);
     return () => clearTimeout(timer);
   }, [onFinish]);
 
@@ -22,7 +21,7 @@ function LadybugSplash({ onFinish }) {
   );
 }
 
-function App() {
+export default function App() {
   const [preferences, setPreferences] = useState(null);
   const [splashDone, setSplashDone] = useState(false);
 
@@ -38,7 +37,7 @@ function App() {
   return (
     <div className="app-root">
       <header className="app-header">
-        <h1 className="app-title">Naziv stranice</h1>
+        <h1 className="app-title">SECURE NEWS FEED</h1>
         {preferences && (
           <button
             type="button"
@@ -50,18 +49,17 @@ function App() {
         )}
       </header>
 
-      <main className="app-main">
-        {!preferences ? (
+      {!preferences ? (
+        // SAMO forma – centrirana kartica
+        <main className="onboarding-layout">
           <FilterForm onSubmit={setPreferences} />
-        ) : (
-          <Feed
-            preferences={preferences}
-            onBack={handleResetPreferences}
-          />
-        )}
-      </main>
+        </main>
+      ) : (
+        // Nakon submit – cijeli ekran zauzima Feed (unutra već ima grid + heatmap sidebar)
+        <main className="feed-page">
+          <Feed preferences={preferences} />
+        </main>
+      )}
     </div>
   );
 }
-
-export default App;

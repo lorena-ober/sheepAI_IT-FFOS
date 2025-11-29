@@ -1,5 +1,3 @@
-// frontend/src/components/ArticleOverlay.jsx
-
 export default function ArticleOverlay({ article, onClose }) {
   const {
     title = "No title available",
@@ -13,17 +11,23 @@ export default function ArticleOverlay({ article, onClose }) {
   } = article || {};
 
   return (
-    <div className="overlay-backdrop" onClick={onClose}>
+    <div className="overlay-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="overlay-title" tabIndex={-1}>
       <div
         className="overlay-card"
-        onClick={(e) => e.stopPropagation()} // spriječi zatvaranje pri kliku unutar carda
+        onClick={(e) => e.stopPropagation()}
+        tabIndex={0}
       >
-        <button className="overlay-close" type="button" onClick={onClose}>
+        <button
+          className="overlay-close"
+          type="button"
+          onClick={onClose}
+          aria-label="Close overlay"
+        >
           ✕
         </button>
 
         <header className="overlay-header">
-          <h2 className="overlay-title">{title}</h2>
+          <h2 id="overlay-title" className="overlay-title">{title}</h2>
           <div className="overlay-meta">
             {source && <span className="meta-pill">{source}</span>}
             {geo && <span className="badge badge-geo">{geo}</span>}
@@ -34,13 +38,13 @@ export default function ArticleOverlay({ article, onClose }) {
               </span>
             )}
             {typeof riskScore === "number" && (
-              <span className="badge badge-risk">{riskScore} risk</span>
+              <span className="badge badge-risk-high">{riskScore} risk</span>
             )}
           </div>
         </header>
 
         <section className="overlay-body">
-          <p className="overlay-summary">{extendedSummary}</p>
+          <p>{extendedSummary}</p>
         </section>
 
         <footer className="overlay-footer">
@@ -48,7 +52,7 @@ export default function ArticleOverlay({ article, onClose }) {
             className="primary-btn"
             href={link}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Open original article
           </a>

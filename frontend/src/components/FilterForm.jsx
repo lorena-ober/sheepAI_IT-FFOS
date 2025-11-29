@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../styles/global.css";
 
 const INTEREST_OPTIONS = [
   "vulnerabilities",
@@ -8,6 +7,10 @@ const INTEREST_OPTIONS = [
   "cloud-security",
   "ai-security",
   "privacy",
+  "policy",
+  "cryptography",
+  "zero-day",
+  "ransomware",
 ];
 
 const CONTENT_TYPE_OPTIONS = [
@@ -15,12 +18,16 @@ const CONTENT_TYPE_OPTIONS = [
   { value: "cybersecurity", label: "Cybersecurity" },
   { value: "ai", label: "AI" },
   { value: "vulnerabilities", label: "Vulnerabilities" },
+  { value: "malware", label: "Malware" },
+  { value: "policy", label: "Policy" },
+  { value: "ransomware", label: "Ransomware" },
 ];
 
 const MODE_OPTIONS = [
   { value: "risk", label: "Risk fokus" },
   { value: "popularity", label: "Popularnost" },
   { value: "relevance", label: "AI relevantnost" },
+  { value: "recency", label: "Najnovije" },
 ];
 
 function FilterForm({ onSubmit }) {
@@ -53,17 +60,16 @@ function FilterForm({ onSubmit }) {
   };
 
   return (
-    <section className="filter-screen">
+    <section className="filter-screen" aria-label="Filter preferences form">
       <h2 className="filter-title">Prilagodi svoj feed</h2>
       <p className="filter-subtitle">
-        Odaberi teme i način filtriranja vijesti. Kasnije ih uvijek možeš
-        promijeniti.
+        Odaberi teme i način filtriranja vijesti. Kasnije ih uvijek možeš promijeniti.
       </p>
 
       <form className="filter-form" onSubmit={handleSubmit}>
         {/* Interests */}
-        <div className="filter-group">
-          <h3 className="filter-group-title">Interesi</h3>
+        <div className="filter-group" role="region" aria-labelledby="interests-label">
+          <h3 id="interests-label" className="filter-group-title">Interesi</h3>
           <div className="filter-chips">
             {INTEREST_OPTIONS.map((interest) => {
               const active = selectedInterests.includes(interest);
@@ -73,9 +79,10 @@ function FilterForm({ onSubmit }) {
                   type="button"
                   className={active ? "chip chip-active" : "chip"}
                   onClick={() => toggleInterest(interest)}
+                  aria-pressed={active}
                 >
                   {interest}
-                  {active && <span className="chip-x">×</span>}
+                  {active && <span className="chip-x" aria-hidden="true">×</span>}
                 </button>
               );
             })}
@@ -83,49 +90,33 @@ function FilterForm({ onSubmit }) {
         </div>
 
         {/* Strictness */}
-        <div className="filter-group">
-          <h3 className="filter-group-title">Strictness</h3>
+        <div className="filter-group" role="radiogroup" aria-labelledby="strictness-label">
+          <h3 id="strictness-label" className="filter-group-title">Strictness</h3>
           <div className="filter-strictness">
-            <label className="radio-pill">
-              <input
-                type="radio"
-                name="strictness"
-                value="low"
-                checked={strictness === "low"}
-                onChange={(e) => setStrictness(e.target.value)}
-              />
-              <span>Low</span>
-            </label>
-            <label className="radio-pill">
-              <input
-                type="radio"
-                name="strictness"
-                value="medium"
-                checked={strictness === "medium"}
-                onChange={(e) => setStrictness(e.target.value)}
-              />
-              <span>Medium</span>
-            </label>
-            <label className="radio-pill">
-              <input
-                type="radio"
-                name="strictness"
-                value="high"
-                checked={strictness === "high"}
-                onChange={(e) => setStrictness(e.target.value)}
-              />
-              <span>High</span>
-            </label>
+            {["low", "medium", "high"].map((level) => (
+              <label key={level} className="radio-pill">
+                <input
+                  type="radio"
+                  name="strictness"
+                  value={level}
+                  checked={strictness === level}
+                  onChange={(e) => setStrictness(e.target.value)}
+                />
+                <span>{level.charAt(0).toUpperCase() + level.slice(1)}</span>
+              </label>
+            ))}
           </div>
         </div>
 
         {/* Content type */}
         <div className="filter-group">
-          <h3 className="filter-group-title">Content type</h3>
+          <h3 className="filter-group-title" htmlFor="content-type-select">Content type</h3>
           <select
+            id="content-type-select"
             className="filter-select"
             value={contentType}
             onChange={(e) => setContentType(e.target.value)}
+            aria-label="Content type selector"
           >
             {CONTENT_TYPE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -137,11 +128,13 @@ function FilterForm({ onSubmit }) {
 
         {/* Mode */}
         <div className="filter-group">
-          <h3 className="filter-group-title">Mode</h3>
+          <h3 className="filter-group-title" htmlFor="mode-select">Mode</h3>
           <select
+            id="mode-select"
             className="filter-select"
             value={mode}
             onChange={(e) => setMode(e.target.value)}
+            aria-label="Personalization mode selector"
           >
             {MODE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -153,17 +146,19 @@ function FilterForm({ onSubmit }) {
 
         {/* Heatmap toggle */}
         <div className="filter-group filter-heatmap">
-          <label className="toggle">
+          <label className="toggle" htmlFor="heatmap-toggle">
             <input
               type="checkbox"
+              id="heatmap-toggle"
               checked={heatmapEnabled}
               onChange={(e) => setHeatmapEnabled(e.target.checked)}
             />
-            <span className="toggle-slider" />
+            <span className="toggle-slider" aria-hidden="true" />
             <span className="toggle-label">Prikaži heatmapu</span>
           </label>
         </div>
 
+        {/* Submit */}
         <div className="filter-actions">
           <button type="submit" className="primary-btn">
             Generiraj feed

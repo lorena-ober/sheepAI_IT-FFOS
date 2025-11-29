@@ -1,10 +1,8 @@
-// frontend/src/components/ArticleCard.jsx
-
 function riskClass(riskScore) {
-  if (riskScore == null) return "risk-unknown";
-  if (riskScore >= 70) return "risk-high";
-  if (riskScore >= 40) return "risk-medium";
-  return "risk-low";
+  if (riskScore == null) return "badge-risk-low";
+  if (riskScore >= 70) return "badge-risk-high";
+  if (riskScore >= 40) return "badge-risk-medium";
+  return "badge-risk-low";
 }
 
 export default function ArticleCard({ article, onOpenOverlay }) {
@@ -22,13 +20,22 @@ export default function ArticleCard({ article, onOpenOverlay }) {
   const safeBullets = bulletPoints.slice(0, 3);
 
   return (
-    <article className="article-card">
+    <article
+      className="article-card"
+      tabIndex={0}
+      role="button"
+      onClick={onOpenOverlay}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onOpenOverlay();
+      }}
+      aria-label={`Detalji za vijest: ${title}`}
+    >
       <header className="card-header">
         <h3 className="article-title">{title}</h3>
         <div className="card-meta">
           {source && <span className="meta-pill">{source}</span>}
           {publishedAt && (
-            <span className="meta-pill meta-muted">
+            <span className="meta-pill">
               {new Date(publishedAt).toLocaleDateString()}
             </span>
           )}
@@ -37,9 +44,7 @@ export default function ArticleCard({ article, onOpenOverlay }) {
 
       <div className="card-badges">
         {typeof riskScore === "number" && (
-          <span className={`badge badge-risk ${riskClass(riskScore)}`}>
-            Risk {riskScore}
-          </span>
+          <span className={`badge ${riskClass(riskScore)}`}>Risk {riskScore}</span>
         )}
         {integrityLabel && (
           <span className="badge badge-integrity">{integrityLabel}</span>
@@ -50,7 +55,7 @@ export default function ArticleCard({ article, onOpenOverlay }) {
       <ul className="article-bullets">
         {safeBullets.length ? (
           safeBullets.map((bp, i) => (
-            <li key={i} onMouseEnter={onOpenOverlay}>
+            <li key={i} tabIndex={0} aria-label={`Bullet point: ${bp}`}>
               {bp}
             </li>
           ))
@@ -60,7 +65,7 @@ export default function ArticleCard({ article, onOpenOverlay }) {
       </ul>
 
       <footer className="card-footer">
-        <button className="link-btn" type="button" onClick={onOpenOverlay}>
+        <button className="link-btn" type="button" onClick={onOpenOverlay} aria-label={`Prošireni sažetak vijesti: ${title}`}>
           See more →
         </button>
         {link && (
@@ -68,7 +73,9 @@ export default function ArticleCard({ article, onOpenOverlay }) {
             className="link-btn subtle"
             href={link}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            aria-label={`Otvori originalni članak: ${title}`}
+            onClick={(e) => e.stopPropagation()}
           >
             Open original
           </a>

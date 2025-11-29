@@ -1,17 +1,18 @@
-// frontend/src/components/Feed.jsx
 import { useEffect, useMemo, useState } from "react";
 import "../styles/global.css";
 import { fetchNews } from "../api.js";
 import ArticleCard from "./ArticleCard.jsx";
 import ArticleOverlay from "./ArticleOverlay.jsx";
+<<<<<<< Updated upstream
+=======
+import RiskBarometer from "./RiskBarometer";
+>>>>>>> Stashed changes
 
 function applyStrictnessFilter(articles, strictness) {
   if (!strictness) return articles;
-
   let minRisk = 0;
   if (strictness === "medium") minRisk = 30;
   if (strictness === "high") minRisk = 60;
-
   return articles.filter(
     (a) => typeof a.riskScore === "number" && a.riskScore >= minRisk
   );
@@ -24,6 +25,8 @@ function applyContentTypeFilter(articles, contentType) {
     malware: ["malware", "rat", "trojan", "backdoor"],
     vulnerabilities: ["vulnerability", "vulnerabilities", "cve", "exploit"],
     policy: ["policy", "compliance", "regulation"],
+    ai: ["artificial intelligence", "ai", "machine learning"],
+    cybersecurity: ["cybersecurity", "security", "hacker", "threat"],
   };
 
   const keywords = keywordGroups[contentType];
@@ -37,18 +40,15 @@ function applyContentTypeFilter(articles, contentType) {
 
 function applySorting(articles, personalization) {
   const copy = [...articles];
-
   if (personalization === "risk") {
     return copy.sort((a, b) => (b.riskScore || 0) - (a.riskScore || 0));
   }
-
   if (personalization === "recency") {
-    return copy.sort(
-      (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-    );
+    return copy.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   }
-
-  // balanced / unknown = original order
+  if (personalization === "popularity") {
+    return copy.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+  }
   return copy;
 }
 
@@ -75,9 +75,7 @@ export default function Feed({ preferences }) {
         setLoading(true);
         setError(null);
         const data = await fetchNews(preferences);
-
         if (!cancelled) {
-          // fetchNews vraća { articles: [...] }
           setArticles(data.articles || data || []);
         }
       } catch (err) {
@@ -106,20 +104,21 @@ export default function Feed({ preferences }) {
     return result;
   }, [articles, preferences]);
 
-  const geoCounts = useMemo(
-    () => buildGeoCounts(filteredAndSorted),
-    [filteredAndSorted]
-  );
+  const geoCounts = useMemo(() => buildGeoCounts(filteredAndSorted), [filteredAndSorted]);
 
   if (loading) return <div className="feed-status">Loading news…</div>;
   if (error) return <div className="feed-status error">{error}</div>;
-  if (!filteredAndSorted.length) {
-    return <div className="feed-status">Nema članaka za zadane filtere.</div>;
-  }
+  if (!filteredAndSorted.length) return <div className="feed-status">Nema članaka za zadane filtere.</div>;
 
   return (
     <div className="feed-layout">
       <section className="feed-main">
+<<<<<<< Updated upstream
+=======
+        {/* Risk barometer za filtrirane članke */}
+        <RiskBarometer articles={filteredAndSorted} />
+
+>>>>>>> Stashed changes
         <div className="feed-grid">
           {filteredAndSorted.map((article) => (
             <ArticleCard
@@ -132,7 +131,11 @@ export default function Feed({ preferences }) {
       </section>
 
       {preferences.heatmap && (
+<<<<<<< Updated upstream
         <aside className="feed-sidebar">
+=======
+        <aside className="feed-sidebar" aria-label="Geo activity sidebar">
+>>>>>>> Stashed changes
           <h3>Geo activity</h3>
           <ul className="geo-list">
             {Object.entries(geoCounts).map(([country, count]) => (
@@ -143,17 +146,25 @@ export default function Feed({ preferences }) {
             ))}
           </ul>
           <p className="geo-hint">
+<<<<<<< Updated upstream
             * Approximate geo extracted by AI. Used for rough “heatmap” of where
             incidents happen.
+=======
+            * Approximate geo extracted by AI. Used for rough “heatmap” of where incidents happen.
+>>>>>>> Stashed changes
           </p>
         </aside>
       )}
 
       {activeArticle && (
+<<<<<<< Updated upstream
         <ArticleOverlay
           article={activeArticle}
           onClose={() => setActiveArticle(null)}
         />
+=======
+        <ArticleOverlay article={activeArticle} onClose={() => setActiveArticle(null)} />
+>>>>>>> Stashed changes
       )}
     </div>
   );

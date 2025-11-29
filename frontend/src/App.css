@@ -29,3 +29,93 @@
   color: white;
   cursor: pointer;
 }
+
+/* Glow efekt na cijeli feed područje */
+.feed-layout {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: #0a0f12;
+  box-shadow:
+    0 0 15px 3px rgba(0, 188, 212, 0.7),
+    0 0 30px 8px rgba(0, 188, 212, 0.35);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Dodaj lagani hover glow na svaku karticu */
+.article-card {
+  background: var(--color-bg-alt);
+  padding: 1.4rem 1.6rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    filter var(--transition);
+}
+.article-card:hover,
+.article-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 20px 4px var(--color-primary),
+    0 14px 35px #00bcd480;
+  filter: drop-shadow(0 0 6px var(--color-primary));
+  outline: none;
+}
+
+/* Raspored feed-main i feed-sidebar na većim ekranima */
+@media (min-width: 900px) {
+  .feed-main {
+    flex: 3 1 650px;
+    min-width: 350px;
+  }
+  .feed-sidebar {
+    flex: 1 1 300px;
+  }
+}
+
+/* Centriraj sadržaj i dodaj malo razmaka ispod headera */
+.app-root {
+  max-width: 1200px;
+  margin: 3rem auto 4rem;
+  padding: 0 24px;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #18333a;
+}
+
+/* Poboljšani padding i margine za sidebar */
+.feed-sidebar {
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem 1.8rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  user-select: none;
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+}
+
+/* Poboljšani naslov u sidebaru */
+.feed-sidebar h3 {
+  margin-top: 0;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
