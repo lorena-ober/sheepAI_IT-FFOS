@@ -1,16 +1,22 @@
-# general
-.DS_Store
-*.log
-
-# node / react
+# Node
 node_modules/
-dist/
-build/
-.vite/
+backend/node_modules/
+frontend/node_modules/
 
-# env (API keys)
+# Build output
+backend/dist/
+frontend/dist/
+dist/
+
+# Env / secrets
 .env
 .env.local
-.env.development
-.env.production
-.env.test
+backend/.env
+frontend/.env
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
