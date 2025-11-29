@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/global.css";
+import Dropdown from "./Dropdown.jsx";
 
 const INTEREST_OPTIONS = [
   "vulnerabilities",
@@ -117,39 +118,25 @@ function FilterForm({ onSubmit }) {
           </div>
         </div>
 
-        {/* Content type */}
+        {/* Content type — CUSTOM DROPDOWN */}
         <div className="filter-group">
           <h3 className="filter-group-title">Content type</h3>
-          <select
-            className="filter-select"
+          <Dropdown
             value={contentType}
-            onChange={(e) => setContentType(e.target.value)}
-          >
-            {CONTENT_TYPE_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={CONTENT_TYPE_OPTIONS}
+            onChange={(val) => setContentType(val)}
+          />
         </div>
 
-        {/* Mode */}
+        {/* Mode — CUSTOM DROPDOWN */}
         <div className="filter-group">
           <h3 className="filter-group-title">Mode</h3>
-          <select
-            className="filter-select"
+          <Dropdown
             value={mode}
-            onChange={(e) => setMode(e.target.value)}
-          >
-            {MODE_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={MODE_OPTIONS}
+            onChange={(val) => setMode(val)}
+          />
         </div>
-
-
 
         <div className="filter-actions">
           <button type="submit" className="primary-btn">

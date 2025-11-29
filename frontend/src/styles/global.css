@@ -919,3 +919,86 @@ a:hover {
     text-align: center;
   }
 }
+
+
+/* =====================================================
+   CUSTOM DROPDOWN — iOS GLASS FINTECH
+   ===================================================== */
+
+.dd-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+}
+
+.dd-btn {
+  width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: linear-gradient(135deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(15, 23, 42, 0.88)
+  );
+  backdrop-filter: blur(14px);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dd-btn:hover {
+  border-color: rgba(56, 189, 248, 0.8);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 1);
+}
+
+.dd-arrow {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.dd-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(15, 23, 42, 0.92)
+  );
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 1);
+  backdrop-filter: blur(18px);
+  padding: 0.4rem 0;
+  z-index: 50;
+  animation: ddFade 0.16s ease-out;
+}
+
+@keyframes ddFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dd-item {
+  padding: 0.55rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dd-item:hover {
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--text-main);
+}
+
+.dd-item-active {
+  background: rgba(56, 189, 248, 0.15);
+  color: #bbf7d0;
+  border-left: 3px solid rgba(56, 189, 248, 0.8);
+}

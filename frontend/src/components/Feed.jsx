@@ -5,7 +5,7 @@ import { fetchNews } from "../api.js";
 import ArticleCard from "./ArticleCard.jsx";
 import ArticleOverlay from "./ArticleOverlay.jsx";
 import RiskBarometer from "./RiskBarometer";
-import Heatmap from "./Heatmap";
+
 
 function applyStrictnessFilter(articles, strictness) {
   if (!strictness) return articles;
@@ -138,12 +138,6 @@ export default function Feed({ preferences }) {
           ))}
         </div>
 
-        {/* Heatmap – prikaz globalnog rizika po državama */}
-        {preferences.heatmap && (
-          <div className="feed-heatmap-wrapper">
-            <Heatmap articles={filteredAndSorted} />
-          </div>
-        )}
       </section>
 
       {/* Sidebar s geo countovima */}
