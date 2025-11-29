@@ -596,11 +596,13 @@ html {
 }
 
 /* === FEED GRID (override min width za članke) === */
+/* === FEED GRID === */
 .feed-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
   padding: 2rem 0;
+  padding: 2rem;
 }
 
 /* === ARTICLE CARD === */
@@ -612,6 +614,9 @@ html {
   transition: 0.2s ease;
 }
 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
 .article-card:hover {
   transform: translateY(-4px);
 }
@@ -663,6 +668,7 @@ html {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
+  background: rgba(0,0,0,0.55);
   display: flex;
   justify-content: center;
   align-items: center;

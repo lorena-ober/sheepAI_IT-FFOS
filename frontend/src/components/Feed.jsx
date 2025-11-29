@@ -8,6 +8,13 @@ import ArticleOverlay from "./ArticleOverlay.jsx";
 export default function Feed({ preferences }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+import { fetchNews } from "../api.js";
+import ArticleCard from "./ArticleCard";
+import ArticleOverlay from "./ArticleOverlay";
+
+export default function Feed({ preferences }) {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);   // initial load state
   const [error, setError] = useState(null);
 
   const [activeOverlay, setActiveOverlay] = useState(null);
@@ -19,6 +26,7 @@ export default function Feed({ preferences }) {
       try {
         setLoading(true);
         setError(null);
+        setLoading(true);   // ✅ MOVED HERE: Inside async fn, not directly inside effect
 
         const res = await fetchNews(preferences);
         if (!cancelled) {
@@ -40,6 +48,7 @@ export default function Feed({ preferences }) {
 
     return () => {
       cancelled = true;
+      cancelled = true;  // cleanup to avoid memory leaks
     };
   }, [preferences]);
 
@@ -53,6 +62,14 @@ export default function Feed({ preferences }) {
         {articles.map((article) => (
           <ArticleCard
             key={article.id || article.link}
+
+  return (
+    <div className="feed">
+
+      <div className="feed-grid">
+        {articles.map((article) => (
+          <ArticleCard
+            key={article.id}
             article={article}
             onBulletHover={(idx) =>
               setActiveOverlay({ article, bulletIndex: idx })
@@ -69,6 +86,7 @@ export default function Feed({ preferences }) {
           onClose={() => setActiveOverlay(null)}
         />
       )}
+
     </div>
   );
 }

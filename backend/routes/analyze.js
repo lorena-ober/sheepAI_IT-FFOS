@@ -1,25 +1,28 @@
+// backend/routes/analyze.js
 const express = require("express");
 const router = express.Router();
+const { analyzeArticle } = require("../services/aiService");
 
-// Ovdje će kasnije biti poziv prema OpenAI API-ju.
-// Za sada samo vraćamo echo da znamo da ruta radi.
+router.post("/", async (req, res) => {
+  try {
+    const article = req.body?.article;
 
-router.post("/", (req, res) => {
-  const { articleText } = req.body || {};
+    if (!article || (!article.title && !article.cleanText)) {
+      return res
+        .status(400)
+        .json({ error: "Missing article data (title or cleanText required)" });
+    }
 
-  if (!articleText) {
-    return res.status(400).json({ error: "articleText is required" });
+    const analysis = await analyzeArticle(article);
+
+    res.json({
+      articleId: article.id || null,
+      ...analysis,
+    });
+  } catch (error) {
+    console.error("Error in POST /api/analyze:", error);
+    res.status(500).json({ error: "Failed to analyze article" });
   }
-
-  // TODO: ovdje ide AI summarization, risk, integrity, geo...
-
-  res.json({
-    summary: "Ovdje će ići pravi AI sažetak.",
-    riskScore: 50,
-    integrityLabel: "Likely Reliable",
-    integrityConfidence: 80,
-    geoLocation: "Unknown",
-  });
 });
 
 module.exports = router;
