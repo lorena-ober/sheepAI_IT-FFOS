@@ -1,48 +1,58 @@
 // frontend/src/components/ArticleOverlay.jsx
 
-// 1) OVO NA VRH FILEA
 export default function ArticleOverlay({ article, onClose }) {
   const {
     title = "No title available",
     extendedSummary = "",
-    cleanText = "",
-    riskScore = "N/A",
-    integrityLabel = "N/A",
-    integrityConfidence = "N/A",
-    link = "#"
-} = article || {};
+    riskScore,
+    integrityLabel,
+    integrityConfidence,
+    geo,
+    link = "#",
+    source,
+  } = article || {};
 
-
-  // 2) RETURN — STAVITI ODMAH IZA CONST BLOKA
   return (
     <div className="overlay-backdrop" onClick={onClose}>
-      
-      {/* 3) OVERLAY CARD — IDE UNUTAR BACKDROP-A */}
-      <div className="overlay-card" onClick={(e) => e.stopPropagation()}>
-        
-        {/* 4) CLOSE GUMB — PRVI U CARDU */}
-        <button className="overlay-close" onClick={onClose}>×</button>
+      <div
+        className="overlay-card"
+        onClick={(e) => e.stopPropagation()} // spriječi zatvaranje pri kliku unutar carda
+      >
+        <button className="overlay-close" type="button" onClick={onClose}>
+          ✕
+        </button>
 
-        {/* 5) NASLOV */}
-        <h2>{title}</h2>
+        <header className="overlay-header">
+          <h2 className="overlay-title">{title}</h2>
+          <div className="overlay-meta">
+            {source && <span className="meta-pill">{source}</span>}
+            {geo && <span className="badge badge-geo">{geo}</span>}
+            {integrityLabel && (
+              <span className="badge badge-integrity">
+                {integrityLabel}
+                {integrityConfidence != null ? ` · ${integrityConfidence}%` : ""}
+              </span>
+            )}
+            {typeof riskScore === "number" && (
+              <span className="badge badge-risk">{riskScore} risk</span>
+            )}
+          </div>
+        </header>
 
-        {/* 6) TEKST SAŽETKA */}
-        <p className="overlay-summary">
-          {extendedSummary || cleanText}
-        </p>
+        <section className="overlay-body">
+          <p className="overlay-summary">{extendedSummary}</p>
+        </section>
 
-        {/* 7) META BADGEOVI */}
-        <div className="overlay-meta">
-          <span className="badge">Risk: {riskScore}</span>
-          <span className="badge">Label: {integrityLabel}</span>
-          <span className="badge">Confidence: {integrityConfidence}</span>
-        </div>
-
-        {/* 8) LINK NA ORIGINAL */}
-        <a href={link} target="_blank" className="overlay-link">
-          View original →
-        </a>
-
+        <footer className="overlay-footer">
+          <a
+            className="primary-btn"
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open original article
+          </a>
+        </footer>
       </div>
     </div>
   );

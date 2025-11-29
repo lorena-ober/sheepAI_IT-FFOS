@@ -1,40 +1,88 @@
 // frontend/src/components/Feed.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "../styles/global.css";
 import { fetchNews } from "../api.js";
 import ArticleCard from "./ArticleCard.jsx";
 import ArticleOverlay from "./ArticleOverlay.jsx";
 
+function applyStrictnessFilter(articles, strictness) {
+  if (!strictness) return articles;
+
+  let minRisk = 0;
+  if (strictness === "medium") minRisk = 30;
+  if (strictness === "high") minRisk = 60;
+
+  return articles.filter(
+    (a) => typeof a.riskScore === "number" && a.riskScore >= minRisk
+  );
+}
+
+function applyContentTypeFilter(articles, contentType) {
+  if (!contentType || contentType === "all") return articles;
+
+  const keywordGroups = {
+    malware: ["malware", "rat", "trojan", "backdoor"],
+    vulnerabilities: ["vulnerability", "vulnerabilities", "cve", "exploit"],
+    policy: ["policy", "compliance", "regulation"],
+  };
+
+  const keywords = keywordGroups[contentType];
+  if (!keywords) return articles;
+
+  return articles.filter((a) => {
+    const text = `${a.title || ""} ${a.snippet || ""} ${a.cleanText || ""}`.toLowerCase();
+    return keywords.some((k) => text.includes(k));
+  });
+}
+
+function applySorting(articles, personalization) {
+  const copy = [...articles];
+
+  if (personalization === "risk") {
+    return copy.sort((a, b) => (b.riskScore || 0) - (a.riskScore || 0));
+  }
+
+  if (personalization === "recency") {
+    return copy.sort(
+      (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+    );
+  }
+
+  // balanced / unknown = original order
+  return copy;
+}
+
+function buildGeoCounts(articles) {
+  const counts = {};
+  for (const a of articles) {
+    const key = a.geo || "Unknown";
+    counts[key] = (counts[key] || 0) + 1;
+  }
+  return counts;
+}
+
 export default function Feed({ preferences }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-import { fetchNews } from "../api.js";
-import ArticleCard from "./ArticleCard";
-import ArticleOverlay from "./ArticleOverlay";
-
-export default function Feed({ preferences }) {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);   // initial load state
   const [error, setError] = useState(null);
-
-  const [activeOverlay, setActiveOverlay] = useState(null);
+  const [activeArticle, setActiveArticle] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadNews() {
+    async function load() {
       try {
         setLoading(true);
         setError(null);
-        setLoading(true);   // ✅ MOVED HERE: Inside async fn, not directly inside effect
+        const data = await fetchNews(preferences);
 
-        const res = await fetchNews(preferences);
         if (!cancelled) {
-          setArticles(res?.articles || res || []);
+          // fetchNews vraća { articles: [...] }
+          setArticles(data.articles || data || []);
         }
       } catch (err) {
         if (!cancelled) {
-          console.error("Error fetching news:", err);
+          console.error("Error loading news:", err);
           setError("Failed to load news.");
         }
       } finally {
@@ -44,49 +92,69 @@ export default function Feed({ preferences }) {
       }
     }
 
-    loadNews();
+    load();
 
     return () => {
       cancelled = true;
-      cancelled = true;  // cleanup to avoid memory leaks
     };
   }, [preferences]);
 
-  if (loading) return <p>Loading news...</p>;
-  if (error) return <p className="error">{error}</p>;
-  if (!articles.length) return <p>Nema članaka za zadane filtere.</p>;
+  const filteredAndSorted = useMemo(() => {
+    let result = applyStrictnessFilter(articles, preferences.strictness);
+    result = applyContentTypeFilter(result, preferences.contentType);
+    result = applySorting(result, preferences.mode || "risk");
+    return result;
+  }, [articles, preferences]);
+
+  const geoCounts = useMemo(
+    () => buildGeoCounts(filteredAndSorted),
+    [filteredAndSorted]
+  );
+
+  if (loading) return <div className="feed-status">Loading news…</div>;
+  if (error) return <div className="feed-status error">{error}</div>;
+  if (!filteredAndSorted.length) {
+    return <div className="feed-status">Nema članaka za zadane filtere.</div>;
+  }
 
   return (
-    <div className="feed">
-      <div className="feed-grid">
-        {articles.map((article) => (
-          <ArticleCard
-            key={article.id || article.link}
+    <div className="feed-layout">
+      <section className="feed-main">
+        <div className="feed-grid">
+          {filteredAndSorted.map((article) => (
+            <ArticleCard
+              key={article.id || article.link}
+              article={article}
+              onOpenOverlay={() => setActiveArticle(article)}
+            />
+          ))}
+        </div>
+      </section>
 
-  return (
-    <div className="feed">
-
-      <div className="feed-grid">
-        {articles.map((article) => (
-          <ArticleCard
-            key={article.id}
-            article={article}
-            onBulletHover={(idx) =>
-              setActiveOverlay({ article, bulletIndex: idx })
-            }
-            onBulletLeave={() => setActiveOverlay(null)}
-          />
-        ))}
-      </div>
-
-      {activeOverlay && (
-        <ArticleOverlay
-          article={activeOverlay.article}
-          bulletIndex={activeOverlay.bulletIndex}
-          onClose={() => setActiveOverlay(null)}
-        />
+      {preferences.heatmap && (
+        <aside className="feed-sidebar">
+          <h3>Geo activity</h3>
+          <ul className="geo-list">
+            {Object.entries(geoCounts).map(([country, count]) => (
+              <li key={country}>
+                <span>{country}</span>
+                <span className="geo-count">{count}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="geo-hint">
+            * Approximate geo extracted by AI. Used for rough “heatmap” of where
+            incidents happen.
+          </p>
+        </aside>
       )}
 
+      {activeArticle && (
+        <ArticleOverlay
+          article={activeArticle}
+          onClose={() => setActiveArticle(null)}
+        />
+      )}
     </div>
   );
 }

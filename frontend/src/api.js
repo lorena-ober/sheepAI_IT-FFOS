@@ -1,5 +1,6 @@
 // frontend/src/api.js
 
+// Jedan, jedinstveni BASE URL
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
@@ -36,9 +37,6 @@ function buildQueryFromPreferences(preferences = {}) {
   const query = params.toString();
   return query ? `?${query}` : "";
 }
-// Base URL — koristi VITE varijablu ako postoji, inače localhost
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
-
 
 // ---------------------------
 // GET /api/news
@@ -47,10 +45,6 @@ export async function fetchNews(preferences = {}) {
   try {
     const query = buildQueryFromPreferences(preferences);
     const res = await fetch(`${API_BASE_URL}/api/news${query}`);
-    // Pretvori preferences u query string
-    const query = new URLSearchParams(preferences).toString();
-
-    const res = await fetch(`${API_BASE_URL}/api/news?${query}`);
 
     if (!res.ok) {
       console.error("Failed to fetch /api/news");
@@ -59,14 +53,10 @@ export async function fetchNews(preferences = {}) {
 
     const data = await res.json();
 
+    // Osiguraj da se FE ne sruši ako backend vrati čudan oblik
     return {
       articles: data?.articles || data || [],
     };
-    // Osiguraj da se FE ne sruši ako backend vrati čudan oblik
-    return {
-      articles: data?.articles || data || []
-    };
-
   } catch (err) {
     console.error("fetchNews error:", err);
     return { articles: [] };
@@ -75,11 +65,6 @@ export async function fetchNews(preferences = {}) {
 
 // ---------------------------
 // POST /api/analyze
-
-
-// ---------------------------
-// POST /api/analyze
-// (ako kasnije želiš on-demand AI)
 // ---------------------------
 export async function analyzeArticle(article) {
   try {
@@ -87,7 +72,6 @@ export async function analyzeArticle(article) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(article),
-      body: JSON.stringify(article)
     });
 
     if (!res.ok) {
@@ -97,8 +81,6 @@ export async function analyzeArticle(article) {
 
     const data = await res.json();
     return data.analysis || data || null;
-    return data.analysis || null;
-
   } catch (err) {
     console.error("analyzeArticle error:", err);
     return null;

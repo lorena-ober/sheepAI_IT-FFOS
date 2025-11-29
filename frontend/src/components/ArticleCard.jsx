@@ -1,33 +1,56 @@
 // frontend/src/components/ArticleCard.jsx
 
-// 1) OVO IDE NA SAMI VRH FILEA
-export default function ArticleCard({ article, onBulletHover, onBulletLeave }) {
-  // 2) OVO IDE ODMAH ISPOD export default
+function riskClass(riskScore) {
+  if (riskScore == null) return "risk-unknown";
+  if (riskScore >= 70) return "risk-high";
+  if (riskScore >= 40) return "risk-medium";
+  return "risk-low";
+}
+
+export default function ArticleCard({ article, onOpenOverlay }) {
   const {
     title,
     bulletPoints = [],
     riskScore,
     integrityLabel,
     geo,
-    link
+    link,
+    source,
+    publishedAt,
   } = article;
 
-  // 3) RETURN BLOK — OVO STAVITE ISPOD DESTRUKTURIRANJA
-  return (
-    <div className="article-card">
-      
-      {/* 4) TITLE — PRVI ELEMENT U RETURNU */}
-      <h3 className="article-title">{title}</h3>
+  const safeBullets = bulletPoints.slice(0, 3);
 
-      {/* 5) BULLET POINT LISTA — IDE ISPOD TITLE-A */}
+  return (
+    <article className="article-card">
+      <header className="card-header">
+        <h3 className="article-title">{title}</h3>
+        <div className="card-meta">
+          {source && <span className="meta-pill">{source}</span>}
+          {publishedAt && (
+            <span className="meta-pill meta-muted">
+              {new Date(publishedAt).toLocaleDateString()}
+            </span>
+          )}
+        </div>
+      </header>
+
+      <div className="card-badges">
+        {typeof riskScore === "number" && (
+          <span className={`badge badge-risk ${riskClass(riskScore)}`}>
+            Risk {riskScore}
+          </span>
+        )}
+        {integrityLabel && (
+          <span className="badge badge-integrity">{integrityLabel}</span>
+        )}
+        {geo && <span className="badge badge-geo">{geo}</span>}
+      </div>
+
       <ul className="article-bullets">
-        {bulletPoints.length > 0 ? (
-          bulletPoints.map((bp, idx) => (
-            <li
-              key={idx}
-              onMouseEnter={() => onBulletHover(idx)}
-              onMouseLeave={onBulletLeave}
-            >
+        {safeBullets.length ? (
+          safeBullets.map((bp, i) => (
+            <li key={i} onMouseEnter={onOpenOverlay}>
               {bp}
             </li>
           ))
@@ -36,29 +59,21 @@ export default function ArticleCard({ article, onBulletHover, onBulletLeave }) {
         )}
       </ul>
 
-      {/* 6) META INFO — STAVITI ISPOD BULLET LISTE */}
-      <div className="article-meta">
-        {riskScore !== null && <RiskBadge score={riskScore} />}
-        {integrityLabel && (
-          <span className="badge integrity">{integrityLabel}</span>
+      <footer className="card-footer">
+        <button className="link-btn" type="button" onClick={onOpenOverlay}>
+          See more →
+        </button>
+        {link && (
+          <a
+            className="link-btn subtle"
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open original
+          </a>
         )}
-        {geo && <span className="badge geo">{geo}</span>}
-      </div>
-
-      {/* 7) LINK — NA SAMO DNO RETURN-A */}
-      <a href={link} target="_blank" className="read-more">
-        Read original →
-      </a>
-    </div>
+      </footer>
+    </article>
   );
-}
-
-// 8) RISK BADGE HELPER — STAVITI ISPOD ZATVORENE } OD ArticleCard
-function RiskBadge({ score }) {
-  let cls = "badge ";
-  if (score < 40) cls += "badge-risk-low";
-  else if (score < 70) cls += "badge-risk-medium";
-  else cls += "badge-risk-high";
-
-  return <span className={cls}>Risk {score}</span>;
 }
