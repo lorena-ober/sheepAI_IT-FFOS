@@ -14,7 +14,7 @@
 
   --text-main: #f9fafb;
   --text-muted: #9ca3af;
-  --text-soft: #6b7280;
+    --text-soft: #d7deeb;
   --text-link: #22d3ee;
 
   --accent: #22c55e;
@@ -100,11 +100,16 @@ a:hover {
 }
 
 .app-title {
-  font-size: 1.25rem;
-  letter-spacing: 0.06em;
+  font-size: 2.4rem; /* veći naslov */
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #e5e7eb;
+  color: #22d3ee; /* techy cyan */
+  text-shadow:
+    0 0 6px  rgba(34, 211, 238, 0.8),
+    0 0 16px rgba(34, 197, 94, 0.7),
+    0 0 32px rgba(34, 211, 238, 0.9);
 }
+
 
 .app-main {
   flex: 1;
@@ -114,32 +119,41 @@ a:hover {
 }
 
 /* reset filter gumb */
-
 .app-reset-btn {
   border-radius: 999px;
-  border: 1px solid var(--border-subtle);
-  padding: 0.4rem 1rem;
-  background: rgba(15, 23, 42, 0.88);
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  border: 1px solid rgba(56, 189, 248, 0.9);
+  padding: 0.55rem 1.4rem;       /* veći */
+  background: radial-gradient(
+    circle at 0 0,
+    rgba(56, 189, 248, 0.28) 0,
+    rgba(15, 23, 42, 0.95) 45%
+  );
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   cursor: pointer;
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+  box-shadow:
+    0 16px 40px rgba(15, 23, 42, 0.95),
+    0 0 16px rgba(56, 189, 248, 0.45); /* blagi glow */
   backdrop-filter: blur(18px);
   transition:
     border-color 0.18s ease-out,
     color 0.18s ease-out,
     box-shadow 0.18s ease-out,
-    transform 0.1s ease-out;
+    transform 0.1s ease-out,
+    background 0.18s ease-out;
 }
 
 .app-reset-btn:hover {
-  border-color: var(--accent);
+  border-color: #22c55e;
   color: #bbf7d0;
   transform: translateY(-1px);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 1);
+  box-shadow:
+    0 20px 55px rgba(15, 23, 42, 1),
+    0 0 24px rgba(34, 197, 94, 0.6);
 }
 
 /* dark/light */
@@ -800,83 +814,135 @@ a:hover {
   cursor: pointer;
 }
 
-/* ---------- 9. RISK BAROMETER & HEATMAP ---------- */
+/* ---------- 9. RISK BAROMETER ---------- */
 
-.risk-barometer-card {
-  border-radius: var(--card-radius-lg);
-  background: linear-gradient(
-      135deg,
-      rgba(15, 23, 42, 0.98),
-      rgba(15, 23, 42, 0.9)
-    );
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.95);
-  padding: 0.9rem 1rem 1rem;
-  margin-bottom: 1.3rem;
-
-  /* NOVO – reže veliki luk da ne izlazi iz kartice */
-  position: relative;
-  overflow: hidden;
+/* layout unutar kartice */
+.risk-barometer-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 1fr);
+  gap: 1.6rem;
+  align-items: center;
 }
 
+/* lijevi tekstualni dio */
+.risk-barometer-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
 
-.risk-barometer-header {
+.risk-barometer-main-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.risk-barometer-main-unit {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.risk-barometer-description {
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+/* dvije “stat” linije ispod opisa */
+.risk-barometer-secondaries {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.risk-barometer-secondary-row {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
 }
 
-.risk-barometer-tag {
-  font-size: 0.7rem;
+.risk-barometer-label {
   color: var(--text-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
+}
+
+.risk-barometer-value {
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+/* desni gauge dio */
+.risk-barometer-gauge-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.risk-barometer-gauge svg {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+}
+
+/* “050100” → tri uredno raspoređena broja */
+.risk-barometer-scale-labels {
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-soft);
 }
 
 .risk-barometer-main {
   display: flex;
   align-items: baseline;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 
 .risk-barometer-main-value {
-  font-size: 1.35rem;
+  font-size: 2.2rem;        /* bilo ~1.8rem → malo veće */
   font-weight: 600;
+  color: #e5e7eb;           /* svjetlije */
 }
 
 .risk-barometer-main-unit {
-  font-size: 0.78rem;
-  color: var(--text-soft);
+  font-size: 0.9rem;
+  color: #9ca3af;           /* isto malo svjetlije */
 }
 
 .risk-barometer-description {
-  margin-top: 0.1rem;
-  font-size: 0.78rem;
-  color: var(--text-soft);
+  margin-top: 0.35rem;
+  font-size: 0.9rem;        /* mrvicu veći tekst */
+  color: #cbd5f5;           /* svjetlije sivo/plavo */
 }
 
-.risk-barometer-gauge {
-  position: relative;
-  margin-top: 0.7rem;
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    #22c55e 0%,
-    #eab308 50%,
-    #ef4444 100%
-  );
+
+.risk-barometer-secondaries {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
 }
 
-.risk-needle {
-  position: absolute;
-  top: -4px;
-  width: 2px;
-  height: 14px;
-  background: #e5e7eb;
-  border-radius: 999px;
+.risk-barometer-secondary-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  justify-content: flex-start;   /* umjesto space-between */
 }
+
+.risk-barometer-label {
+  color: #e5e7eb;               /* svjetlije */
+}
+
+.risk-barometer-value {
+  color: #f9fafb;
+  font-weight: 500;
+}
+
+
+
 
 
 
