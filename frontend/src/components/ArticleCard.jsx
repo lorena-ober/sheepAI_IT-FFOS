@@ -19,6 +19,7 @@ export default function ArticleCard({ article, onOpenOverlay }) {
     publishedAt,
   } = article;
 
+  // prikaži max 3 bullet-a da kartica ostane čitka
   const safeBullets = bulletPoints.slice(0, 3);
 
   return (
@@ -41,28 +42,32 @@ export default function ArticleCard({ article, onOpenOverlay }) {
             Risk {riskScore}
           </span>
         )}
+
         {integrityLabel && (
           <span className="badge badge-integrity">{integrityLabel}</span>
         )}
+
         {geo && <span className="badge badge-geo">{geo}</span>}
       </div>
 
-      <ul className="article-bullets">
-        {safeBullets.length ? (
-          safeBullets.map((bp, i) => (
-            <li key={i} onMouseEnter={onOpenOverlay}>
-              {bp}
-            </li>
-          ))
-        ) : (
-          <li>No bullet points yet.</li>
-        )}
-      </ul>
+      {safeBullets.length > 0 && (
+        <ul className="article-bullets">
+          {safeBullets.map((bullet, index) => (
+            <li key={index}>{bullet}</li>
+          ))}
+        </ul>
+      )}
 
       <footer className="card-footer">
-        <button className="link-btn" type="button" onClick={onOpenOverlay}>
+        {/* otvara AI overlay – više nema hovera, samo klik */}
+        <button
+          className="link-btn"
+          type="button"
+          onClick={onOpenOverlay}
+        >
           See more →
         </button>
+
         {link && (
           <a
             className="link-btn subtle"
