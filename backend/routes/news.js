@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
     limit
   } = req.query;
 
-  // Log samo da na hackathonu vidite kako frontend šalje preferences
   console.log("GET /api/news filters:", {
     interests,
     strictness,
@@ -30,8 +29,6 @@ router.get("/", async (req, res) => {
     const numericLimit = Number(limit) || 20;
     const articles = await fetchNewsArticles(numericLimit);
 
-    // Za sada ne filtriramo po preferences – to može kasnije B ili zajednički,
-    // kada AI počne vraćati tagove/kategorije.
     res.json({ articles });
   } catch (error) {
     console.error("GET /api/news error:", error.message);
