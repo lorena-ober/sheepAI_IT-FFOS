@@ -71,11 +71,7 @@ function FilterForm({ onSubmit }) {
                 <button
                   key={interest}
                   type="button"
-                  className={
-                    active
-                      ? "chip chip-active"
-                      : "chip"
-                  }
+                  className={active ? "chip chip-active" : "chip"}
                   onClick={() => toggleInterest(interest)}
                 >
                   {interest}
