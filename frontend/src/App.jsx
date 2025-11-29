@@ -54,7 +54,10 @@ function App() {
         {!preferences ? (
           <FilterForm onSubmit={setPreferences} />
         ) : (
-          <Feed preferences={preferences} />
+          <Feed
+            preferences={preferences}
+            onBack={handleResetPreferences}
+          />
         )}
       </main>
     </div>
