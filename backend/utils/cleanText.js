@@ -5,10 +5,14 @@ function cleanText(raw = "") {
 
   let text = String(raw);
 
+  // Ukloni <script> i <style> blokove
   text = text.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "");
   text = text.replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, "");
+
+  // Ukloni sve HTML tagove
   text = text.replace(/<[^>]+>/g, " ");
 
+  // Decode najčešćih HTML entiteta
   const entities = {
     "&nbsp;": " ",
     "&amp;": "&",
@@ -21,6 +25,7 @@ function cleanText(raw = "") {
     text = text.replace(new RegExp(entity, "g"), chr);
   }
 
+  // Normaliziraj whitespace
   text = text.replace(/\s+/g, " ").trim();
 
   return text;

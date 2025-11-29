@@ -11,6 +11,21 @@ const THE_HACKER_NEWS_RSS_URL =
 
 /**
  * Dohvati i normaliziraj članke s The Hacker News.
+ * Vraća array objekata:
+ * {
+ *   id,
+ *   title,
+ *   link,
+ *   publishedAt,
+ *   source,
+ *   snippet,
+ *   cleanText,
+ *   bulletPoints,
+ *   riskScore,
+ *   integrityLabel,
+ *   integrityConfidence,
+ *   geo
+ * }
  */
 async function fetchNewsArticles(limit = 20) {
   try {
@@ -38,6 +53,8 @@ async function fetchNewsArticles(limit = 20) {
         source: "The Hacker News",
         snippet,
         cleanText: fullClean,
+
+        // Polja koja će popuniti AI analiza (analyzeArticle / batch)
         bulletPoints: [],
         riskScore: null,
         integrityLabel: null,
