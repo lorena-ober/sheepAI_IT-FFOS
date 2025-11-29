@@ -693,3 +693,13 @@ html {
   background: none;
   cursor: pointer;
 }
+
+.filter-screen {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
