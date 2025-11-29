@@ -7,12 +7,31 @@ const router = express.Router();
 
 // GET /api/news
 router.get("/", async (req, res) => {
+  const {
+    interests,
+    strictness,
+    contentType,
+    personalization,
+    heatmap,
+    limit
+  } = req.query;
+
+  // Log samo da na hackathonu vidite kako frontend šalje preferences
+  console.log("GET /api/news filters:", {
+    interests,
+    strictness,
+    contentType,
+    personalization,
+    heatmap,
+    limit
+  });
+
   try {
-    const limit = Number(req.query.limit) || 20;
+    const numericLimit = Number(limit) || 20;
+    const articles = await fetchNewsArticles(numericLimit);
 
-    const articles = await fetchNewsArticles(limit);
-
-    // FE očekuje { articles: [...] }
+    // Za sada ne filtriramo po preferences – to može kasnije B ili zajednički,
+    // kada AI počne vraćati tagove/kategorije.
     res.json({ articles });
   } catch (error) {
     console.error("GET /api/news error:", error.message);
