@@ -7,7 +7,7 @@ function LadybugSplash({ onFinish }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
-    }, 2600); // trajanje animacije u ms, sinkronizirano s CSS-om
+    }, 2600); // trajanje animacije
     return () => clearTimeout(timer);
   }, [onFinish]);
 
@@ -22,10 +22,26 @@ function LadybugSplash({ onFinish }) {
   );
 }
 
-function App() {
+export default function App() {
   const [preferences, setPreferences] = useState(null);
   const [splashDone, setSplashDone] = useState(false);
 
+  // 🔥 DARK MODE TOGGLE
+  const [dark, setDark] = useState(() =>
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [dark]);
+
+  // Splash first
   if (!splashDone) {
     return <LadybugSplash onFinish={() => setSplashDone(true)} />;
   }
@@ -37,6 +53,14 @@ function App() {
 
   return (
     <div className="app-root">
+      {/* 🌙 DARK MODE BUTTON */}
+      <button
+        className="theme-toggle-btn"
+        onClick={() => setDark((d) => !d)}
+      >
+        {dark ? "☀️ Light" : "🌙 Dark"}
+      </button>
+
       <header className="app-header">
         <h1 className="app-title">Naziv stranice</h1>
         {preferences && (
@@ -63,5 +87,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

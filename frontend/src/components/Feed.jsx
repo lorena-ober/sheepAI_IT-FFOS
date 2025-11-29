@@ -5,7 +5,7 @@ import { fetchNews } from "../api.js";
 import ArticleCard from "./ArticleCard.jsx";
 import ArticleOverlay from "./ArticleOverlay.jsx";
 import RiskBarometer from "./RiskBarometer";
-
+import Heatmap from "./Heatmap";
 
 function applyStrictnessFilter(articles, strictness) {
   if (!strictness) return articles;
@@ -25,14 +25,16 @@ function applyContentTypeFilter(articles, contentType) {
   const keywordGroups = {
     malware: ["malware", "rat", "trojan", "backdoor"],
     vulnerabilities: ["vulnerability", "vulnerabilities", "cve", "exploit"],
-    policy: ["policy", "compliance", "regulation"],
+    policy: ["policy", "compliance", "regulation"]
   };
 
   const keywords = keywordGroups[contentType];
   if (!keywords) return articles;
 
   return articles.filter((a) => {
-    const text = `${a.title || ""} ${a.snippet || ""} ${a.cleanText || ""}`.toLowerCase();
+    const text = `${a.title || ""} ${a.snippet || ""} ${
+      a.cleanText || ""
+    }`.toLowerCase();
     return keywords.some((k) => text.includes(k));
   });
 }
@@ -120,47 +122,55 @@ export default function Feed({ preferences }) {
   }
 
   return (
-  <div className="feed-layout">
-    <section className="feed-main">
-      {/* 🔵 BAROMETAR – radi na temelju već filtriranih članaka */}
-      <RiskBarometer articles={filteredAndSorted} />
+    <div className="feed-layout">
+      <section className="feed-main">
+        {/* Barometar rizika na vrhu, radi na temelju već filtriranih članaka */}
+        <RiskBarometer articles={filteredAndSorted} />
 
-      <div className="feed-grid">
-        {filteredAndSorted.map((article) => (
-          <ArticleCard
-            key={article.id || article.link}
-            article={article}
-            onOpenOverlay={() => setActiveArticle(article)}
-          />
-        ))}
-      </div>
-    </section>
-
-    {preferences.heatmap && (
-      <aside className="feed-sidebar">
-        <h3>Geo activity</h3>
-        <ul className="geo-list">
-          {Object.entries(geoCounts).map(([country, count]) => (
-            <li key={country}>
-              <span>{country}</span>
-              <span className="geo-count">{count}</span>
-            </li>
+        {/* Grid kartica */}
+        <div className="feed-grid">
+          {filteredAndSorted.map((article) => (
+            <ArticleCard
+              key={article.id || article.link}
+              article={article}
+              onOpenOverlay={() => setActiveArticle(article)}
+            />
           ))}
-        </ul>
-        <p className="geo-hint">
-          * Approximate geo extracted by AI. Used for rough “heatmap” of where
-          incidents happen.
-        </p>
-      </aside>
-    )}
+        </div>
 
-    {activeArticle && (
-      <ArticleOverlay
-        article={activeArticle}
-        onClose={() => setActiveArticle(null)}
-      />
-    )}
-  </div>
-);
+        {/* Heatmap – prikaz globalnog rizika po državama */}
+        {preferences.heatmap && (
+          <div className="feed-heatmap-wrapper">
+            <Heatmap articles={filteredAndSorted} />
+          </div>
+        )}
+      </section>
 
+      {/* Sidebar s geo countovima */}
+      {preferences.heatmap && (
+        <aside className="feed-sidebar">
+          <h3>Geo activity</h3>
+          <ul className="geo-list">
+            {Object.entries(geoCounts).map(([country, count]) => (
+              <li key={country}>
+                <span>{country}</span>
+                <span className="geo-count">{count}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="geo-hint">
+            * Approximate geo extracted by AI. Used for rough “heatmap” of where
+            incidents happen.
+          </p>
+        </aside>
+      )}
+
+      {activeArticle && (
+        <ArticleOverlay
+          article={activeArticle}
+          onClose={() => setActiveArticle(null)}
+        />
+      )}
+    </div>
+  );
 }

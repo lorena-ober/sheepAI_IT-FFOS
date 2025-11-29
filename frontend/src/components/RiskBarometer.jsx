@@ -8,9 +8,23 @@ function clampRisk(v) {
 }
 
 function getLevel(avg) {
-  if (avg < 35) return { label: "Low", description: "Mostly low-risk incidents.", color: "#16a34a" };
-  if (avg < 70) return { label: "Elevated", description: "Mix of medium and high-risk incidents.", color: "#eab308" };
-  return { label: "Severe", description: "Feed is dominated by high-risk incidents.", color: "#ef4444" };
+  if (avg < 35)
+    return {
+      label: "Low",
+      description: "Feed is mostly composed of low-risk incidents.",
+      color: "#16a34a",
+    };
+  if (avg < 70)
+    return {
+      label: "Elevated",
+      description: "Mix of medium and high-risk incidents.",
+      color: "#eab308",
+    };
+  return {
+    label: "Severe",
+    description: "Feed is dominated by high-risk incidents.",
+      color: "#ef4444",
+    };
 }
 
 export default function RiskBarometer({ articles = [] }) {
@@ -22,11 +36,12 @@ export default function RiskBarometer({ articles = [] }) {
     return (
       <section className="risk-barometer-card">
         <header className="risk-barometer-header">
-          <h2>Today&apos;s risk barometer</h2>
-          <span className="risk-barometer-tag">No data</span>
+          <h2>TODAY&apos;S RISK BAROMETER</h2>
+          <span className="risk-barometer-tag">NO DATA</span>
         </header>
         <p className="risk-barometer-empty">
-          We don&apos;t have enough analyzed incidents to calculate today&apos;s barometer.
+          We don&apos;t have enough analyzed incidents to calculate today&apos;s
+          barometer.
         </p>
       </section>
     );
@@ -37,23 +52,14 @@ export default function RiskBarometer({ articles = [] }) {
   const max = clampRisk(Math.max(...scores));
   const level = getLevel(avg);
 
-  // map 0–100 → angle from -120° to +120°
-  const MIN_ANGLE = -120;
-  const MAX_ANGLE = 120;
-  const angle = MIN_ANGLE + (avg / 100) * (MAX_ANGLE - MIN_ANGLE);
-  const rad = (angle * Math.PI) / 180;
-
-  const cx = 60;
-  const cy = 60;
-  const r = 40;
-  const x = cx + r * Math.cos(rad);
-  const y = cy + r * Math.sin(rad);
+  // 0 → -90° (lijevo), 50 → 0° (gore), 100 → +90° (desno)
+  const rotation = -90 + (avg / 100) * 180;
 
   return (
     <section className="risk-barometer-card">
       <header className="risk-barometer-header">
-        <h2>Today&apos;s risk barometer</h2>
-        <span className="risk-barometer-tag">{level.label}</span>
+        <h2>TODAY&apos;S RISK BAROMETER</h2>
+        <span className="risk-barometer-tag">{level.label.toUpperCase()}</span>
       </header>
 
       <div className="risk-barometer-content">
@@ -61,7 +67,13 @@ export default function RiskBarometer({ articles = [] }) {
         <div className="risk-barometer-gauge">
           <svg viewBox="0 0 120 70">
             <defs>
-              <linearGradient id="riskGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <linearGradient
+                id="riskGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
                 <stop offset="0%" stopColor="#16a34a" />
                 <stop offset="50%" stopColor="#eab308" />
                 <stop offset="100%" stopColor="#ef4444" />
@@ -88,14 +100,17 @@ export default function RiskBarometer({ articles = [] }) {
 
             {/* ticks */}
             {[0, 25, 50, 75, 100].map((v) => {
-              const a = MIN_ANGLE + (v / 100) * (MAX_ANGLE - MIN_ANGLE);
-              const rTick = 46;
-              const rTickInner = 41;
-              const radTick = (a * Math.PI) / 180;
-              const x1 = cx + rTickInner * Math.cos(radTick);
-              const y1 = cy + rTickInner * Math.sin(radTick);
-              const x2 = cx + rTick * Math.cos(radTick);
-              const y2 = cy + rTick * Math.sin(radTick);
+              const cx = 60;
+              const cy = 60;
+              const base = -90; // kad je 50, igla je gore
+              const angleDeg = base + (v / 100) * 180; // isto mapiranje
+              const rad = (angleDeg * Math.PI) / 180;
+              const rOuter = 46;
+              const rInner = 41;
+              const x1 = cx + rInner * Math.cos(rad);
+              const y1 = cy + rInner * Math.sin(rad);
+              const x2 = cx + rOuter * Math.cos(rad);
+              const y2 = cy + rOuter * Math.sin(rad);
               return (
                 <line
                   key={v}
@@ -109,18 +124,31 @@ export default function RiskBarometer({ articles = [] }) {
               );
             })}
 
-            {/* needle */}
-            <line
-              x1={cx}
-              y1={cy}
-              x2={x}
-              y2={y}
-              stroke={level.color}
-              strokeWidth="2.4"
-              strokeLinecap="round"
-            />
-            {/* needle center */}
-            <circle cx={cx} cy={cy} r="4" fill="#0f172a" stroke={level.color} strokeWidth="2" />
+            {/* needle – baza prema gore, pa rotiramo */}
+            <g
+              className="risk-needle"
+              transform={`rotate(${rotation} 60 60)`}
+            >
+              {/* igla */}
+              <line
+                x1="60"
+                y1="60"
+                x2="60"
+                y2="20"
+                stroke={level.color}
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+              {/* centar */}
+              <circle
+                cx="60"
+                cy="60"
+                r="5"
+                fill="#0f172a"
+                stroke={level.color}
+                strokeWidth="2"
+              />
+            </g>
           </svg>
 
           <div className="risk-barometer-scale-labels">
@@ -143,7 +171,9 @@ export default function RiskBarometer({ articles = [] }) {
               <span className="risk-barometer-value">{max}/100</span>
             </div>
             <div>
-              <span className="risk-barometer-label">Incidents analyzed</span>
+              <span className="risk-barometer-label">
+                Incidents analyzed
+              </span>
               <span className="risk-barometer-value">{scores.length}</span>
             </div>
           </div>
