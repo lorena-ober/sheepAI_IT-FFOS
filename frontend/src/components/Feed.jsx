@@ -4,6 +4,8 @@ import "../styles/global.css";
 import { fetchNews } from "../api.js";
 import ArticleCard from "./ArticleCard.jsx";
 import ArticleOverlay from "./ArticleOverlay.jsx";
+import RiskBarometer from "./RiskBarometer";
+
 
 function applyStrictnessFilter(articles, strictness) {
   if (!strictness) return articles;
@@ -118,43 +120,47 @@ export default function Feed({ preferences }) {
   }
 
   return (
-    <div className="feed-layout">
-      <section className="feed-main">
-        <div className="feed-grid">
-          {filteredAndSorted.map((article) => (
-            <ArticleCard
-              key={article.id || article.link}
-              article={article}
-              onOpenOverlay={() => setActiveArticle(article)}
-            />
+  <div className="feed-layout">
+    <section className="feed-main">
+      {/* 🔵 BAROMETAR – radi na temelju već filtriranih članaka */}
+      <RiskBarometer articles={filteredAndSorted} />
+
+      <div className="feed-grid">
+        {filteredAndSorted.map((article) => (
+          <ArticleCard
+            key={article.id || article.link}
+            article={article}
+            onOpenOverlay={() => setActiveArticle(article)}
+          />
+        ))}
+      </div>
+    </section>
+
+    {preferences.heatmap && (
+      <aside className="feed-sidebar">
+        <h3>Geo activity</h3>
+        <ul className="geo-list">
+          {Object.entries(geoCounts).map(([country, count]) => (
+            <li key={country}>
+              <span>{country}</span>
+              <span className="geo-count">{count}</span>
+            </li>
           ))}
-        </div>
-      </section>
+        </ul>
+        <p className="geo-hint">
+          * Approximate geo extracted by AI. Used for rough “heatmap” of where
+          incidents happen.
+        </p>
+      </aside>
+    )}
 
-      {preferences.heatmap && (
-        <aside className="feed-sidebar">
-          <h3>Geo activity</h3>
-          <ul className="geo-list">
-            {Object.entries(geoCounts).map(([country, count]) => (
-              <li key={country}>
-                <span>{country}</span>
-                <span className="geo-count">{count}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="geo-hint">
-            * Approximate geo extracted by AI. Used for rough “heatmap” of where
-            incidents happen.
-          </p>
-        </aside>
-      )}
+    {activeArticle && (
+      <ArticleOverlay
+        article={activeArticle}
+        onClose={() => setActiveArticle(null)}
+      />
+    )}
+  </div>
+);
 
-      {activeArticle && (
-        <ArticleOverlay
-          article={activeArticle}
-          onClose={() => setActiveArticle(null)}
-        />
-      )}
-    </div>
-  );
 }
