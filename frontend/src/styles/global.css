@@ -964,6 +964,46 @@ html {
   transition: transform 0.5s ease-out;
 }
 
+/* ------------------------------------------------ */
+/*  DARK MODE – GLOBAL BACKGROUND                   */
+/* ------------------------------------------------ */
 
+/* Tamna pozadina cijelog bodyja */
+.dark body {
+  background: radial-gradient(
+    circle at 0 0,
+    #1a0f18,
+    #130b12 40%,
+    #0c070d 100%
+  ) !important;
+}
 
+/* app-root pozadina tamna */
+.dark .app-root {
+  background: transparent !important;
+}
+
+/* Tamni card-bg radi svih elemenata */
+.dark {
+  --bg: #1a0f18;
+  --bg-alt: #130b12;
+  --bg-1: #1a0f18;
+  --bg-2: #130b12;
+  --bg-3: #0c070d;
+}
+
+/* Splash screen tamna verzija */
+.dark .splash-root {
+  background: radial-gradient(
+    circle at 0 0,
+    #2a1623 0%,
+    #130b12 45%,
+    #050305 110%
+  ) !important;
+}
+
+.dark .splash-bg-glow {
+  background: radial-gradient(circle, #4d3b4a, #1a0f18 60%, transparent 70%);
+  opacity: 0.25;
+}
 
