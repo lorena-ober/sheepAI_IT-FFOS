@@ -5,27 +5,12 @@ const { cleanText } = require("../utils/cleanText");
 
 const parser = new Parser();
 
-// The Hacker News RSS feed (Feedburner). [web:8][web:17]
+// Potvrđeni The Hacker News RSS feed. [web:8][web:42]
 const THE_HACKER_NEWS_RSS_URL =
   process.env.THN_RSS_URL || "http://feeds.feedburner.com/TheHackersNews";
 
 /**
- * Dohvati i normaliziraj članke.
- * Vraća array objekata:
- * {
- *   id,
- *   title,
- *   link,
- *   publishedAt,
- *   source,
- *   snippet,
- *   cleanText,
- *   bulletPoints,
- *   riskScore,
- *   integrityLabel,
- *   integrityConfidence,
- *   geo
- * }
+ * Dohvati i normaliziraj članke s The Hacker News.
  */
 async function fetchNewsArticles(limit = 20) {
   try {
@@ -33,7 +18,7 @@ async function fetchNewsArticles(limit = 20) {
 
     const items = (feed.items || []).slice(0, limit);
 
-    const normalized = items.map((item, index) => {
+    return items.map((item, index) => {
       const title = item.title || "";
       const link = item.link || item.guid || "";
       const pubDate = item.pubDate || item.isoDate || null;
@@ -53,15 +38,13 @@ async function fetchNewsArticles(limit = 20) {
         source: "The Hacker News",
         snippet,
         cleanText: fullClean,
-        bulletPoints: [], // AI će kasnije popuniti
+        bulletPoints: [],
         riskScore: null,
         integrityLabel: null,
         integrityConfidence: null,
         geo: null
       };
     });
-
-    return normalized;
   } catch (error) {
     console.error("rssService.fetchNewsArticles error:", error.message);
     throw new Error("Failed to fetch or parse RSS feed");
