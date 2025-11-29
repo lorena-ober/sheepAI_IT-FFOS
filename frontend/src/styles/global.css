@@ -828,3 +828,142 @@ html {
 .dark .filter-screen * {
   color: var(--text-main) !important;
 }
+/* KARTICA BAROMETRA */
+.risk-barometer-card {
+  background: #ffe4ec;              /* ista paleta kao ostatak */
+  border-radius: 24px;
+  padding: 1.3rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 18px 45px rgba(148, 27, 89, 0.15);
+}
+
+/* HEADER (naslov + SEVERE badge) */
+.risk-barometer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.risk-barometer-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.risk-barometer-tag {
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* LAYOUT UNUTAR KARTICE: gauge + tekst */
+.risk-barometer-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* SVG GUMENI MJERAC */
+.risk-barometer-gauge {
+  min-width: 220px;
+}
+
+.risk-barometer-gauge svg {
+  width: 220px;
+  height: auto;
+  display: block;
+}
+
+/* 0 – 50 – 100 ispod luka */
+.risk-barometer-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* BLOK S BROJKAMA I OPISOM */
+.risk-barometer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 180px;
+}
+
+.risk-barometer-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+}
+
+.risk-barometer-main-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+
+.risk-barometer-main-unit {
+  font-size: 0.8rem;
+}
+
+.risk-barometer-description {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+/* DVIJE MALENE STATISTIKE ISPOD */
+.risk-barometer-secondaries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  margin-top: 0.3rem;
+}
+
+.risk-barometer-label {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.risk-barometer-value {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+/* KAD NEMA PODATAKA */
+.risk-barometer-empty {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+}
+
+/* KAZALJKA – može imati laganu tranziciju kad se promijeni vrijednost */
+.risk-needle {
+  transition: transform 0.5s ease-out;
+}
+
+/* RESPONSIVE za mobitele */
+@media (max-width: 640px) {
+  .risk-barometer-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .risk-barometer-gauge svg {
+    width: 190px;
+  }
+}
+.risk-needle {
+  transition: transform 0.5s ease-out;
+}
+
+
+
+
